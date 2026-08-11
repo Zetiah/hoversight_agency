@@ -1,708 +1,1466 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hoversight — Your Outsourced Tech Department</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-<style>
-  :root{
-    --bg:#14181c;
-    --panel:#1b2126;
-    --panel-2:#20272d;
-    --ink:#ece8de;
-    --ink-dim:#9aa3ab;
-    --ink-faint:#5b656d;
-    --amber:#f2a93b;
-    --amber-dim:#8a6321;
-    --teal:#4fbf8b;
-    --line:#2a3138;
-    --line-strong:#39424a;
-    --font-display:'Big Shoulders Display', sans-serif;
-    --font-body:'IBM Plex Sans', sans-serif;
-    --font-mono:'IBM Plex Mono', monospace;
-  }
-  *{box-sizing:border-box;}
-  html{scroll-behavior:smooth;}
-  body{
-    margin:0;
-    background:var(--bg);
-    color:var(--ink);
-    font-family:var(--font-body);
-    line-height:1.6;
-    -webkit-font-smoothing:antialiased;
-  }
-  a{color:inherit;}
-  ::selection{background:var(--amber);color:#1a1300;}
-  :focus-visible{outline:2px solid var(--amber);outline-offset:3px;}
-
-  .wrap{max-width:1120px;margin:0 auto;padding:0 32px;}
-  .eyebrow{
-    font-family:var(--font-mono);
-    font-size:12px;
-    letter-spacing:0.12em;
-    text-transform:uppercase;
-    color:var(--amber);
-    display:flex;
-    align-items:center;
-    gap:10px;
-  }
-  .eyebrow::before{content:"";width:7px;height:7px;background:var(--amber);display:inline-block;}
-  .eyebrow.teal{color:var(--teal);}
-  .eyebrow.teal::before{background:var(--teal);}
-
-  /* NAV */
-  nav{
-    position:sticky;top:0;z-index:50;
-    background:rgba(20,24,28,0.92);
-    backdrop-filter:blur(6px);
-    border-bottom:1px solid var(--line);
-  }
-  nav .inner{
-    display:flex;align-items:center;justify-content:space-between;
-    padding:18px 32px;max-width:1120px;margin:0 auto;
-  }
-  .logo{
-    font-family:var(--font-display);
-    font-weight:900;
-    font-size:22px;
-    letter-spacing:0.02em;
-    display:flex;align-items:center;gap:10px;
-  }
-  .logo .dot{width:9px;height:9px;background:var(--amber);display:inline-block;}
-  .logo-icon{height:51px;width:auto;display:block;}
-  nav .links{display:flex;gap:28px;font-size:14px;color:var(--ink-dim);}
-  nav .links a{text-decoration:none;transition:color .15s;}
-  nav .links a:hover{color:var(--ink);}
-  .btn{
-    font-family:var(--font-mono);
-    font-size:13px;
-    letter-spacing:0.03em;
-    padding:11px 20px;
-    border:1px solid var(--amber);
-    color:var(--amber);
-    background:transparent;
-    text-decoration:none;
-    display:inline-flex;align-items:center;gap:8px;
-    transition:background .15s, color .15s;
-  }
-  .btn:hover{background:var(--amber);color:#1a1300;}
-  .btn-ghost{border-color:var(--line-strong);color:var(--ink-dim);}
-  .btn-ghost:hover{background:var(--panel-2);color:var(--ink);}
-
-  /* HERO */
-  header.hero{
-    padding:88px 0 72px;
-    position:relative;
-  }
-  .reticle{position:relative;padding:56px 48px;border:1px solid var(--line-strong);}
-  .reticle::before,.reticle::after,
-  .reticle .c2::before,.reticle .c2::after{
-    content:"";position:absolute;width:22px;height:22px;
-  }
-  .reticle::before{top:-1px;left:-1px;border-top:2px solid var(--amber);border-left:2px solid var(--amber);}
-  .reticle::after{top:-1px;right:-1px;border-top:2px solid var(--amber);border-right:2px solid var(--amber);}
-  .reticle .c2::before{bottom:-1px;left:-1px;border-bottom:2px solid var(--amber);border-left:2px solid var(--amber);position:absolute;}
-  .reticle .c2::after{bottom:-1px;right:-1px;border-bottom:2px solid var(--amber);border-right:2px solid var(--amber);position:absolute;}
-
-  .hero-grid{display:grid;grid-template-columns:1.15fr 0.85fr;gap:56px;align-items:center;perspective:1400px;}
-  h1{
-    font-family:var(--font-display);
-    font-weight:900;
-    font-size:clamp(40px,5.2vw,68px);
-    line-height:1.02;
-    letter-spacing:-0.01em;
-    margin:18px 0 22px;
-  }
-  h1 em{font-style:normal;color:var(--amber);}
-  .hero-sub{font-size:17px;color:var(--ink-dim);max-width:46ch;margin:0 0 32px;}
-  .hero-actions{display:flex;gap:14px;align-items:center;flex-wrap:wrap;}
-  .hero-note{
-    font-family:var(--font-mono);font-size:12.5px;color:var(--ink-faint);
-    margin-top:18px;
-  }
-
-  /* TERMINAL PANEL */
-  .terminal{
-    background:var(--panel);
-    border:1px solid var(--line);
-    font-family:var(--font-mono);
-    font-size:12.5px;
-  }
-  .terminal-head{
-    display:flex;align-items:center;justify-content:space-between;
-    padding:10px 16px;border-bottom:1px solid var(--line);
-    color:var(--ink-faint);
-  }
-  .terminal-head .status{display:flex;align-items:center;gap:8px;color:var(--teal);}
-  .terminal-head .status .pip{width:7px;height:7px;background:var(--teal);border-radius:50%;}
-  .terminal-body{padding:18px 16px;min-height:210px;}
-  .terminal-line{display:flex;gap:12px;margin-bottom:9px;opacity:0;animation:fadein .4s forwards;}
-  .terminal-line .t{color:var(--ink-faint);flex-shrink:0;}
-  .terminal-line .tag{color:var(--amber);flex-shrink:0;width:84px;}
-  .terminal-line .tag.ok{color:var(--teal);}
-  .terminal-line .msg{color:var(--ink-dim);}
-  .cursor{display:inline-block;width:7px;height:14px;background:var(--amber);vertical-align:middle;animation:blink 1s step-end infinite;}
-  @keyframes fadein{to{opacity:1;}}
-  @keyframes blink{50%{opacity:0;}}
-
-  /* SECTIONS */
-  section{padding:96px 0;border-top:1px solid var(--line);}
-  .section-head{margin-bottom:48px;}
-  h2{
-    font-family:var(--font-display);
-    font-weight:900;
-    font-size:clamp(30px,3.4vw,44px);
-    line-height:1.05;
-    margin:14px 0 0;
-    max-width:22ch;
-  }
-  .lede{font-size:16px;color:var(--ink-dim);max-width:60ch;margin-top:16px;}
-
-  /* PROBLEM LOG */
-  .log-list{border-top:1px solid var(--line);}
-  .log-item{
-    display:grid;grid-template-columns:120px 1fr;gap:24px;
-    padding:22px 0;border-bottom:1px solid var(--line);
-  }
-  .log-item .code{font-family:var(--font-mono);font-size:12px;color:var(--ink-faint);padding-top:3px;}
-  .log-item p{margin:0;font-size:15.5px;color:var(--ink-dim);}
-  .log-item strong{color:var(--ink);font-weight:500;}
-
-  /* MANIFESTO */
-  .manifesto{
-    display:grid;grid-template-columns:0.9fr 1.1fr;gap:64px;align-items:start;perspective:1200px;
-  }
-  .manifesto blockquote{
-    margin:0;font-family:var(--font-display);font-weight:700;
-    font-size:clamp(22px,2.4vw,30px);line-height:1.2;color:var(--ink);
-  }
-  .manifesto .body p{font-size:15.5px;color:var(--ink-dim);margin:0 0 16px;}
-
-  /* METHOD STEPS */
-  .steps{display:flex;flex-direction:column;}
-  .step{
-    display:grid;grid-template-columns:64px 1fr;gap:28px;
-    padding:32px 0;border-bottom:1px solid var(--line);
-  }
-  .step:first-child{border-top:1px solid var(--line);}
-  .step .num{
-    font-family:var(--font-display);font-weight:900;font-size:44px;color:var(--panel-2);
-    -webkit-text-stroke:1px var(--line-strong);
-  }
-  .step h3{
-    font-family:var(--font-body);font-weight:600;font-size:18px;margin:0 0 8px;color:var(--ink);
-  }
-  .step p{margin:0;font-size:15px;color:var(--ink-dim);max-width:60ch;}
-
-  /* FIT / NOT FIT */
-  .fit-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);}
-  .fit-col{background:var(--bg);padding:32px;}
-  .fit-col h3{
-    font-family:var(--font-mono);font-size:13px;letter-spacing:0.08em;text-transform:uppercase;
-    margin:0 0 20px;display:flex;align-items:center;gap:10px;
-  }
-  .beacon{width:9px;height:9px;border-radius:50%;display:inline-block;}
-  .beacon.green{background:var(--teal);}
-  .beacon.red{background:#d9633f;}
-  .fit-col ul{list-style:none;margin:0;padding:0;}
-  .fit-col li{
-    font-size:15px;color:var(--ink-dim);padding:12px 0;border-bottom:1px solid var(--line);
-  }
-  .fit-col li:last-child{border-bottom:none;}
-
-  /* ENGAGEMENT TIERS */
-  .tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);}
-  .tier{background:var(--bg);padding:32px 28px;display:flex;flex-direction:column;}
-  .tier.featured{background:var(--panel);border-top:2px solid var(--amber);}
-  .tier .tier-name{font-family:var(--font-mono);font-size:13px;text-transform:uppercase;letter-spacing:0.06em;color:var(--ink-faint);}
-  .tier.featured .tier-name{color:var(--amber);}
-  .tier .tier-price{font-family:var(--font-display);font-weight:900;font-size:32px;margin:10px 0 4px;}
-  .tier .tier-unit{font-size:13px;color:var(--ink-faint);margin-bottom:20px;}
-  .tier ul{list-style:none;margin:0 0 24px;padding:0;flex-grow:1;}
-  .tier li{font-size:14px;color:var(--ink-dim);padding:8px 0;border-bottom:1px solid var(--line);}
-  .tier li:last-child{border-bottom:none;}
-  .tier .btn{align-self:flex-start;}
-
-  /* CLOSING CTA */
-  .cta-final{text-align:left;padding:104px 0 96px;}
-  .cta-final h2{max-width:16ch;}
-  .cta-final .lede{margin-bottom:36px;}
-
-  footer{border-top:1px solid var(--line);padding:32px 0;}
-  footer .inner{
-    display:flex;justify-content:space-between;align-items:center;
-    font-family:var(--font-mono);font-size:12px;color:var(--ink-faint);
-  }
-
-  @media(max-width:860px){
-    .hero-grid,.manifesto{grid-template-columns:1fr;}
-    .fit-grid,.tiers{grid-template-columns:1fr;}
-    .log-item{grid-template-columns:1fr;gap:6px;}
-    .reticle{padding:36px 22px;}
-    nav .links{display:none;}
-  }
-  @media (prefers-reduced-motion: reduce){
-    .terminal-line{animation:none;opacity:1;}
-    .cursor{animation:none;}
-  }
-
-  /* GSAP 3D STAGE — perspective lives on the parent, rotation on the child */
-  .stage-3d{perspective:1100px;}
-  .log-list{perspective:1400px;}
-  .steps{perspective:1400px;}
-  .fit-grid{perspective:1400px;}
-  .tiers{perspective:1600px;}
-  .log-item,.step,.fit-col,.tier,.terminal,.manifesto blockquote{
-    will-change:transform,opacity;
-    backface-visibility:hidden;
-  }
-
-  /* PROGRESS RAIL — signature motion element, ties to the status/beacon motif */
-  .progress-rail{position:fixed;top:0;left:0;height:2px;background:var(--amber);width:0%;z-index:60;transform-origin:left center;}
-  @media (prefers-reduced-motion: reduce){
-    .progress-rail{display:none;}
-  }
-
-  /* VARIANCE — lift the featured tier out of strict grid symmetry */
-  .tier.featured{transform:translateY(-14px);}
-  @media(max-width:860px){
-    .tier.featured{transform:none;}
-  }
-
-  /* ICONS */
-  .icon-svg{display:block;width:100%;height:100%;}
-  .step-head{display:flex;align-items:center;gap:14px;margin:0 0 10px;}
-  .step-head h3{margin:0;}
-  .step-icon{width:36px;height:36px;padding:8px;border:1px solid var(--line-strong);color:var(--amber);flex-shrink:0;}
-  .fit-col h3{gap:10px;}
-  .fit-icon{width:18px;height:18px;display:inline-flex;flex-shrink:0;}
-  .fit-icon.good{color:var(--teal);}
-  .fit-icon.bad{color:#d9633f;}
-  .tier-icon{width:30px;height:30px;color:var(--ink-faint);margin-bottom:16px;}
-  .tier.featured .tier-icon{color:var(--amber);}
-
-  /* TEXT ANIMATION — split-word/char wrappers */
-  .word,.char{display:inline-block;will-change:transform,opacity;}
-</style>
-</head>
-<body>
-<div class="progress-rail" id="progress-rail"></div>
-
-<nav>
-  <div class="inner">
-    <div class="logo"><img src="/logo.svg" alt="Hoversight" class="logo-icon">HOVERSIGHT</div>
-    <div class="links">
-      <a href="#problem">The problem</a>
-      <a href="#method">Method</a>
-      <a href="#fit">Fit</a>
-      <a href="#engagements">Partnership</a>
-    </div>
-    <a class="btn" href="https://pwyxai.hatchable.site/" target="_blank" rel="noopener noreferrer">Book a call →</a>
-  </div>
-</nav>
-
-<header class="hero">
-  <div class="wrap">
-    <div class="reticle">
-      <div class="c2"></div>
-      <div class="hero-grid">
-        <div>
-          <div class="eyebrow">Your outsourced tech department</div>
-          <h1 aria-label="We don't build it and disappear. We move in.">We don't build it<br>and disappear.<br><em>We move in.</em></h1>
-          <p class="hero-sub">Hoversight is the technical team you don't have to hire, manage, or replace — engineers who work inside your business, building and looking after your systems for as long as you need them, not just until a contract ends.</p>
-          <div class="hero-actions">
-            <a class="btn" href="https://booking.hoversight.agency/" target="_blank" rel="noopener noreferrer">Book a call →</a>
-            <a class="btn btn-ghost" href="#method">See how we work</a>
-          </div>
-          <p class="hero-note">No demos. No decks. We start by watching how your team actually works today.</p>
-        </div>
-        <div class="terminal">
-          <div class="terminal-head">
-            <span>what we're working on</span>
-            <span class="status"><span class="pip"></span>live</span>
-          </div>
-          <div class="terminal-body" id="term"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</header>
-
-<section id="problem">
-  <div class="wrap">
-    <div class="section-head">
-      <div class="eyebrow">Field report</div>
-      <h2 aria-label="You've hired five vendors. You still don't have a tech team.">You've hired five vendors. You still don't have a tech team.</h2>
-      <p class="lede">A contractor built it, a freelancer patched it, an agency demoed something better and vanished. Here's what that actually leaves behind.</p>
-    </div>
-    <div class="log-list">
-      <div class="log-item">
-        <div class="code">SYM // 01</div>
-        <p>Someone still exports a spreadsheet by hand <strong>every Monday</strong>, because the last contractor's integration only ever half-worked.</p>
-      </div>
-      <div class="log-item">
-        <div class="code">SYM // 02</div>
-        <p>Three systems all claim to have the <strong>"real" number</strong> — and nobody on the team fully trusts any of them.</p>
-      </div>
-      <div class="log-item">
-        <div class="code">SYM // 03</div>
-        <p>There's a workaround duct-taped onto the process that <strong>only one person understands</strong>, and they left the company eight months ago.</p>
-      </div>
-      <div class="log-item">
-        <div class="code">SYM // 04</div>
-        <p>The AI feature everyone was excited about got <strong>quietly muted</strong> after it got something wrong in front of a client, and the agency that built it stopped returning calls.</p>
-      </div>
-      <div class="log-item">
-        <div class="code">SYM // 05</div>
-        <p>Every new project means <strong>re-explaining your business from scratch</strong> to whichever vendor won this quarter's bid.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section>
-  <div class="wrap">
-    <div class="manifesto">
-      <blockquote>Software doesn't fail from bad code. It fails from having no owner.</blockquote>
-      <div class="body">
-        <p>A vendor sells you the vision and hands you a login. A freelancer builds exactly what you asked for and disappears. An agency charges you every month while relearning your business every quarter. None of them are still there when something breaks at 11pm, or when the next thing you need wasn't part of the original plan.</p>
-        <p>Hoversight isn't a one-and-done project shop. We work the way the best technical teams in the world do — we don't disappear once something's working. We stay on as your actual technical team: the people who build the next thing, look after the last thing, and pick up the phone in between.</p>
-        <p>That means one team that knows your business, your systems, and your data — instead of a new outside company for every new problem. We're reachable, not routed through a ticket queue. We carry what we've learned forward from one project to the next. We're there for the shaky first weeks after anything new goes live, and we're still there a year later when you need the next thing built.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="method">
-  <div class="wrap">
-    <div class="section-head">
-      <div class="eyebrow teal">How we work</div>
-      <h2 aria-label="Five steps. Then we start the next five.">Five steps. Then we start the next five.</h2>
-      <p class="lede">This isn't a sales pitch dressed up as a process. It's the actual order we work in — and unlike a one-off project, it doesn't end when step five is done. It just starts again on whatever you need built next.</p>
-    </div>
-    <div class="steps">
-      <div class="step">
-        <div class="num">01</div>
-        <div>
-          <div class="step-head">
-            <span class="step-icon"><svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"/><path d="M12 18c-.328 0 -.652 -.017 -.97 -.05c-3.172 -.332 -5.85 -2.315 -8.03 -5.95c2.4 -4 5.4 -6 9 -6c3.465 0 6.374 1.853 8.727 5.558"/><path d="M15 18a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"/><path d="M20.2 20.2l1.8 1.8"/></svg></span>
-            <h3>We watch before we touch anything</h3>
-          </div>
-          <p>We talk to the people actually doing the work, not just the owner or manager who called us in — and we watch how things really get done, until we can write one clear sentence: this works if [this specific number] goes from x to y.</p>
-        </div>
-      </div>
-      <div class="step">
-        <div class="num">02</div>
-        <div>
-          <div class="step-head">
-            <span class="step-icon"><svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M11 12a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/><path d="M12 7a5 5 0 1 0 5 5"/><path d="M13 3.055a9 9 0 1 0 7.941 7.945"/><path d="M15 6v3h3l3 -3h-3v-3l-3 3"/><path d="M15 9l-3 3"/></svg></span>
-            <h3>We start with the smallest thing that proves it works</h3>
-          </div>
-          <p>No giant six-month plan. We pick the smallest, simplest version that proves the idea on your real information, with your real team using it — and we write down everything else we're holding off on for now, so nothing sneaks in later.</p>
-        </div>
-      </div>
-      <div class="step">
-        <div class="num">03</div>
-        <div>
-          <div class="step-head">
-            <span class="step-icon"><svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9.615 20h-2.615a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v8"/><path d="M14 19l2 2l4 -4"/><path d="M9 8h4"/><path d="M9 12h2"/></svg></span>
-            <h3>We check our own work before calling it done</h3>
-          </div>
-          <p>Anywhere this involves AI, we decide what a "right answer" actually looks like — using real examples — before we consider the work finished. AI that hasn't been checked against real examples isn't ready, no matter how good the demo looked.</p>
-        </div>
-      </div>
-      <div class="step">
-        <div class="num">04</div>
-        <div>
-          <div class="step-head">
-            <span class="step-icon"><svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 12h4l3 8l4 -16l3 8h4"/></svg></span>
-            <h3>We stick around for the risky part</h3>
-          </div>
-          <p>The first few weeks after something new goes live are when problems actually show up. Not because the work was wrong — because nobody was watching closely enough to catch it before your team did. We watch closely.</p>
-        </div>
-      </div>
-      <div class="step">
-        <div class="num">05</div>
-        <div>
-          <div class="step-head">
-            <span class="step-icon"><svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -4v4h4"/><path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 4v-4h-4"/><path d="M11 12a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/></svg></span>
-            <h3>We stay, and we bring everything we've learned with us</h3>
-          </div>
-          <p>We write down what was specific to this project versus what should become a standard part of how your business runs — then we stay on as the team that keeps it working, supports it, and builds whatever comes next, already knowing everything from this round.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="fit">
-  <div class="wrap">
-    <div class="section-head">
-      <div class="eyebrow">Qualification</div>
-      <h2 aria-label="We're built for a relationship, not a quick job.">We're built for a relationship, not a quick job.</h2>
-      <p class="lede">We turn away work that's actually just a one-off job, because that's not what we're set up to do well. Here's how to tell if we're the right long-term fit.</p>
-    </div>
-    <div class="fit-grid">
-      <div class="fit-col">
-        <h3><span class="fit-icon good"><svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l5 5l10 -10"/></svg></span>Good fit</h3>
-        <ul>
-          <li>You want one technical partner for everything — new projects, connecting your systems together, and quick fixes when something breaks — instead of managing a different company for each.</li>
-          <li>You don't have (or don't want) a full in-house engineering team, but you need one to actually exist somewhere.</li>
-          <li>You're tired of re-explaining your business every time a new contractor starts.</li>
-          <li>Your systems and data are complex enough that continuity — someone who already knows where the bodies are buried — is worth more than a cheaper one-off quote.</li>
-        </ul>
-      </div>
-      <div class="fit-col">
-        <h3><span class="fit-icon bad"><svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M18 6l-12 12"/><path d="M6 6l12 12"/></svg></span>Not a fit</h3>
-        <ul>
-          <li>You need one clearly-defined project finished, with no ongoing relationship after.</li>
-          <li>You already have a capable in-house engineering team and just need extra hands short-term.</li>
-          <li>You're shopping purely on lowest hourly rate.</li>
-          <li>Nobody on your side is available to work directly with our team over time.</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="engagements">
-  <div class="wrap">
-    <div class="section-head">
-      <div class="eyebrow teal">How we work together</div>
-      <h2 aria-label="We're a team, not a project. But there's a way in.">We're a team, not a project. But there's a way in.</h2>
-      <p class="lede">Every relationship starts with us getting to know your business. Most turn into ongoing support — that's the thing we're actually built to be.</p>
-    </div>
-    <div class="tiers">
-      <div class="tier">
-        <span class="tier-icon"><svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 16l2 -6l6 -2l-2 6l-6 2"/><path d="M3 12a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"/><path d="M12 3l0 2"/><path d="M12 19l0 2"/><path d="M3 12l2 0"/><path d="M19 12l2 0"/></svg></span>
-        <div class="tier-name">Getting to know you</div>
-        <div class="tier-price">2 weeks</div>
-        <div class="tier-unit">fixed price · the way in</div>
-        <ul>
-          <li>Conversations with your team + watching how work actually gets done</li>
-          <li>A clear map of how your business runs today, that you've confirmed is accurate</li>
-          <li>An agreed, specific goal for what success looks like</li>
-          <li>Our honest advice on how much ongoing help you'd actually need</li>
-        </ul>
-        <a class="btn btn-ghost" href="https://booking.hoversight.agency/" target="_blank" rel="noopener noreferrer">Ask us about this →</a>
-      </div>
-      <div class="tier featured">
-        <span class="tier-icon"><svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 13a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"/><path d="M8 21v-1a2 2 0 0 1 2 -2h4a2 2 0 0 1 2 2v1"/><path d="M15 5a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"/><path d="M17 10h2a2 2 0 0 1 2 2v1"/><path d="M5 5a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"/><path d="M3 13v-1a2 2 0 0 1 2 -2h2"/></svg></span>
-        <div class="tier-name">Your tech team</div>
-        <div class="tier-price">Ongoing</div>
-        <div class="tier-unit">monthly, our main way of working together</div>
-        <ul>
-          <li>One person (or small team) that's dedicated to your business</li>
-          <li>New projects, connecting your systems, and fixes handled as one ongoing list of work</li>
-          <li>Everything we've learned carried forward — you never start over explaining your business to someone new</li>
-          <li>Direct access to reach us, with priority response when something's broken</li>
-          <li>Regular check-ins on what's coming next, not just reacting when things break</li>
-        </ul>
-        <a class="btn" href="https://booking.hoversight.agency/" target="_blank" rel="noopener noreferrer">Book a call →</a>
-      </div>
-      <div class="tier">
-        <span class="tier-icon"><svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3l8 4.5l0 9l-8 4.5l-8 -4.5l0 -9l8 -4.5"/><path d="M12 12l8 -4.5"/><path d="M12 12l0 9"/><path d="M12 12l-8 -4.5"/><path d="M16 5.25l-8 4.5"/></svg></span>
-        <div class="tier-name">One-time project</div>
-        <div class="tier-price">Fixed price</div>
-        <div class="tier-unit">for a clearly defined, one-off need</div>
-        <ul>
-          <li>A working first version, tested against real examples to make sure it's accurate</li>
-          <li>Getting it live and making sure it keeps working in the first weeks</li>
-          <li>Clear, plain-language instructions for your team once we wrap up</li>
-          <li>Option to move into ongoing support afterward</li>
-        </ul>
-        <a class="btn btn-ghost" href="https://booking.hoversight.agency/" target="_blank" rel="noopener noreferrer">Ask us about this →</a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="cta-final" id="cta">
-  <div class="wrap">
-    <div class="eyebrow">Start here</div>
-    <h2 aria-label="Come with the messy version of the problem.">Come with the messy version of the problem.</h2>
-    <p class="lede">The first conversation isn't a sales call — it's the first interview. We're not trying to close a deal this quarter. We're trying to figure out if we're the team you'll still be working with in three years.</p>
-    <a class="btn" href="https://booking.hoversight.agency/" target="_blank" rel="noopener noreferrer">Book a call →</a>
-  </div>
-</section>
-
-<footer>
-  <div class="wrap inner">
-    <span>HOVERSIGHT / your outsourced tech department</span>
-    <span>discovery → build → support → repeat</span>
-  </div>
-</footer>
-
-<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js"></script>
-<script>
-(function(){
-  gsap.registerPlugin(ScrollTrigger, SplitText);
-  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var rail = document.getElementById('progress-rail');
-
-  if (reduced) {
-    gsap.set('.log-item, .step, .fit-col, .tier, .terminal, .manifesto blockquote', {opacity:1, clearProps:'transform'});
-    return;
-  }
-
-  // progress rail, tied to total document scroll
-  gsap.to(rail, {
-    width: '100%',
-    ease: 'none',
-    scrollTrigger: { trigger: document.documentElement, start: 'top top', end: 'bottom bottom', scrub: true }
-  });
-
-  // HERO — plays on load, not scroll-linked
-  var h1Split = new SplitText('h1', { type: 'words,chars', wordsClass: 'word', charsClass: 'char' });
-  h1Split.chars.forEach(function(c){ c.setAttribute('aria-hidden', 'true'); });
-
-  var heroTl = gsap.timeline({ defaults: { ease: 'power3.out' } });
-  heroTl
-    .from('.eyebrow', { opacity: 0, y: 10, duration: .5 })
-    .from(h1Split.chars, { opacity: 0, y: '110%', rotationX: -40, transformPerspective: 400, stagger: .015, duration: .6 }, '-=.2')
-    .from('.hero-sub', { opacity: 0, y: 18, duration: .6 }, '-=.5')
-    .from('.hero-actions .btn', { opacity: 0, y: 14, stagger: .1, duration: .5 }, '-=.35')
-    .from('.hero-note', { opacity: 0, duration: .5 }, '-=.2')
-    .from('.terminal', {
-      opacity: 0, rotationY: -34, x: -40, transformPerspective: 900, transformOrigin: 'left center', duration: .9
-    }, '-=.9');
-
-  // SECTION HEADINGS — word-by-word reveal as each one scrolls into view
-  document.querySelectorAll('h2').forEach(function(h){
-    var split = new SplitText(h, { type: 'words', wordsClass: 'word' });
-    split.words.forEach(function(w){ w.setAttribute('aria-hidden', 'true'); });
-    gsap.from(split.words, {
-      opacity: 0, y: '100%', rotationX: -60, transformPerspective: 500, transformOrigin: 'bottom center',
-      stagger: .04, duration: .6, ease: 'power3.out',
-      scrollTrigger: { trigger: h, start: 'top 85%', toggleActions: 'play none none reverse' }
-    });
-  });
-
-  // PROBLEM LOG — each row flips down into place, like a panel hinging open
-  gsap.utils.toArray('.log-item').forEach(function(item, i){
-    gsap.from(item, {
-      opacity: 0, rotationX: 70, y: 20, transformPerspective: 800, transformOrigin: 'top center',
-      duration: .6, ease: 'power2.out',
-      scrollTrigger: { trigger: item, start: 'top 88%', toggleActions: 'play none none reverse' }
-    });
-  });
-
-  // MANIFESTO — the blockquote tilts gently as it crosses the viewport
-  gsap.to('.manifesto blockquote', {
-    rotationY: 6, rotationX: -3, transformPerspective: 1000, ease: 'none',
-    scrollTrigger: { trigger: '.manifesto', start: 'top bottom', end: 'bottom top', scrub: 1 }
-  });
-  gsap.from('.manifesto blockquote', {
-    opacity: 0, y: 24, duration: .7, ease: 'power3.out',
-    scrollTrigger: { trigger: '.manifesto', start: 'top 80%', toggleActions: 'play none none reverse' }
-  });
-  gsap.from('.manifesto .body p', {
-    opacity: 0, y: 16, stagger: .12, duration: .6, ease: 'power3.out',
-    scrollTrigger: { trigger: '.manifesto .body', start: 'top 82%', toggleActions: 'play none none reverse' }
-  });
-
-  // METHOD STEPS — each one swings in like a page turning
-  gsap.utils.toArray('.step').forEach(function(step){
-    gsap.from(step, {
-      opacity: 0, rotationY: -55, x: -30, transformPerspective: 1000, transformOrigin: 'left center',
-      duration: .65, ease: 'power2.out',
-      scrollTrigger: { trigger: step, start: 'top 85%', toggleActions: 'play none none reverse' }
-    });
-  });
-
-  // FIT / NOT FIT — two doors swinging open from opposite sides
-  var fitCols = gsap.utils.toArray('.fit-col');
-  if (fitCols[0]) {
-    gsap.from(fitCols[0], {
-      opacity: 0, rotationY: -75, transformPerspective: 1200, transformOrigin: 'left center',
-      duration: .8, ease: 'power2.out',
-      scrollTrigger: { trigger: '.fit-grid', start: 'top 78%', toggleActions: 'play none none reverse' }
-    });
-  }
-  if (fitCols[1]) {
-    gsap.from(fitCols[1], {
-      opacity: 0, rotationY: 75, transformPerspective: 1200, transformOrigin: 'right center',
-      duration: .8, ease: 'power2.out',
-      scrollTrigger: { trigger: '.fit-grid', start: 'top 78%', toggleActions: 'play none none reverse' }
-    });
-  }
-
-  // ENGAGEMENT TIERS — flip up into place, featured tier gets extra depth
-  gsap.utils.toArray('.tier').forEach(function(tier){
-    gsap.from(tier, {
-      opacity: 0, rotationX: 50, y: 26, transformPerspective: 1000, transformOrigin: 'bottom center',
-      duration: .7, ease: 'power2.out',
-      scrollTrigger: { trigger: '.tiers', start: 'top 80%', toggleActions: 'play none none reverse' }
-    });
-  });
-  var featured = document.querySelector('.tier.featured');
-  if (featured) {
-    gsap.to(featured, {
-      rotationY: 5, ease: 'none',
-      scrollTrigger: { trigger: featured, start: 'top bottom', end: 'bottom top', scrub: 1 }
-    });
-  }
-})();
-</script>
-
-<script>
-(function(){
-  var lines = [
-    {t:'week 1', tag:'LEARNING', msg:'talking with your team, day 3', ok:false},
-    {t:'week 1', tag:'LEARNING', msg:'found a manual workaround nobody wrote down', ok:false},
-    {t:'week 2', tag:'PLANNING', msg:'plan agreed, clear goal set', ok:true},
-    {t:'week 3', tag:'BUILDING', msg:'building with your actual numbers', ok:false},
-    {t:'week 5', tag:'TESTING', msg:'checked against 42 real examples', ok:false},
-    {t:'week 6', tag:'LAUNCH', msg:'live and running, watching closely', ok:true},
-    {t:'month 14', tag:'SUPPORT', msg:'still your team, still here', ok:true}
-  ];
-  var el = document.getElementById('term');
-  var i = 0;
-  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  function renderAll(){
-    lines.forEach(function(l){ el.appendChild(row(l)); });
-    var c = document.createElement('div');
-    c.className = 'terminal-line';
-    c.innerHTML = '<span class="t">' + lines[lines.length-1].t + '</span><span class="cursor"></span>';
-    el.appendChild(c);
-  }
-
-  function row(l){
-    var div = document.createElement('div');
-    div.className = 'terminal-line';
-    div.innerHTML =
-      '<span class="t">' + l.t + '</span>' +
-      '<span class="tag' + (l.ok ? ' ok' : '') + '">' + l.tag + '</span>' +
-      '<span class="msg">' + l.msg + '</span>';
-    return div;
-  }
-
-  if (reduced) { renderAll(); return; }
-
-  function tick(){
-    if (i >= lines.length) {
-      var c = document.createElement('div');
-      c.className = 'terminal-line';
-      c.style.animationDelay = '0s';
-      c.innerHTML = '<span class="t">' + lines[lines.length-1].t + '</span><span class="cursor"></span>';
-      el.appendChild(c);
-      return;
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hoversight — Proof of Work</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Darker+Grotesque:wght@400;500;600;700;800;900&family=Hanken+Grotesk:wght@400;500;600;700&family=Martian+Mono:wght@300;400;500;600&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --amber: #FFA503;
+      --amber-lo: #FFC24D;
+      --amber-hi: #FFE0A6;
+      --ember: #B84E00;
+      --ink: #140F09;
+      --ink-2: #211913;
+      --paper: #F5EFE2;
+      --paper-2: #E9E0CE;
+      --muted-d: rgba(245, 239, 226, .62);
+      --muted-l: #6A5F52;
+      --line-d: rgba(245, 239, 226, .14);
+      --line-l: rgba(20, 15, 9, .13);
+      --ease: cubic-bezier(.19, 1, .22, 1);
+      --ease2: cubic-bezier(.7, 0, .2, 1);
+      --disp: "Darker Grotesque", sans-serif;
+      --body: "Hanken Grotesk", sans-serif;
+      --mono: "Martian Mono", monospace;
     }
-    var r = row(lines[i]);
-    r.style.animationDelay = '0s';
-    el.appendChild(r);
-    i++;
-    setTimeout(tick, 550);
-  }
-  tick();
-})();
-</script>
 
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box
+    }
+
+    html {
+      scroll-behavior: smooth
+    }
+
+    body {
+      font-family: var(--body);
+      font-size: 16px;
+      line-height: 1.5;
+      background: var(--ink);
+      color: var(--paper);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+      cursor: none
+    }
+
+    body:not(.ready) * {
+      animation-play-state: paused !important
+    }
+
+    ::selection {
+      background: var(--amber);
+      color: var(--ink)
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--amber);
+      outline-offset: 4px;
+      border-radius: 2px
+    }
+
+    .spark svg {
+      display: block
+    }
+
+    .sp-path {
+      fill: currentColor
+    }
+
+    /* grain + scroll progress */
+    .grain {
+      position: fixed;
+      inset: 0;
+      z-index: 9995;
+      pointer-events: none;
+      opacity: .05;
+      mix-blend-mode: overlay;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")
+    }
+
+    .scrollbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      background: var(--amber);
+      width: 0;
+      z-index: 9996
+    }
+
+    /* preloader */
+    #pre {
+      position: fixed;
+      inset: 0;
+      z-index: 9998;
+      background: var(--ink);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      transition: opacity .8s var(--ease), visibility .8s
+    }
+
+    #pre.done {
+      opacity: 0;
+      visibility: hidden
+    }
+
+    #pre .spin {
+      color: var(--amber);
+      animation: spin 2.6s linear infinite
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg)
+      }
+    }
+
+    #pre .pct {
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: .34em;
+      color: var(--muted-d)
+    }
+
+    #pre .wm {
+      font-family: var(--disp);
+      font-weight: 800;
+      font-size: clamp(40px, 7vw, 88px);
+      letter-spacing: -.02em;
+      color: var(--paper);
+      overflow: hidden;
+      height: 1em;
+      line-height: 1
+    }
+
+    #pre .wm span {
+      display: block;
+      transform: translateY(105%);
+      animation: rise .9s var(--ease) .15s forwards
+    }
+
+    @keyframes rise {
+      to {
+        transform: none
+      }
+    }
+
+    /* cursor */
+    .cur {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: var(--amber);
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: width .35s var(--ease), height .35s var(--ease), background .3s
+    }
+
+    .cur.big {
+      width: 66px;
+      height: 66px;
+      background: rgba(255, 165, 3, .14);
+      border: 1px solid var(--amber)
+    }
+
+    @media(hover:none), (pointer:coarse) {
+      .cur {
+        display: none
+      }
+
+      body {
+        cursor: auto
+      }
+    }
+
+    section {
+      position: relative;
+      padding: clamp(80px, 11vw, 168px) clamp(22px, 6vw, 124px)
+    }
+
+    .eyebrow {
+      font-family: var(--mono);
+      font-size: 10.5px;
+      font-weight: 400;
+      letter-spacing: .3em;
+      text-transform: uppercase;
+      display: inline-flex;
+      align-items: center;
+      gap: 11px;
+      opacity: .72
+    }
+
+    .eyebrow .spark {
+      color: var(--amber)
+    }
+
+    .dark {
+      background: var(--ink);
+      color: var(--paper)
+    }
+
+    .pale {
+      background: var(--paper);
+      color: var(--ink)
+    }
+
+    .cta {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 46px;
+      padding: 0 26px;
+      border-radius: 40px;
+      background: var(--amber);
+      color: var(--ink);
+      transition: transform .4s var(--ease), background .3s
+    }
+
+    .cta:hover {
+      transform: translateY(-2px);
+      background: var(--amber-lo)
+    }
+
+    .cta.ghost {
+      background: transparent;
+      border: 1px solid currentColor;
+      font-weight: 400
+    }
+
+    .cta.ghost:hover {
+      background: currentColor;
+      color: var(--ink)
+    }
+
+    .pale .cta.ghost:hover {
+      color: var(--paper)
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px
+    }
+
+    .brand .logo {
+      width: 36px;
+      height: 37px
+    }
+
+    .brand .wm {
+      font-family: var(--disp);
+      font-weight: 800;
+      letter-spacing: -.01em;
+      font-size: 22px;
+      text-transform: uppercase;
+      line-height: 1
+    }
+
+    .tnav {
+      display: flex;
+      gap: 8px
+    }
+
+    .tnav a {
+      font-family: var(--mono);
+      font-size: 11px;
+      text-transform: lowercase;
+      opacity: .6;
+      padding: 10px 12px;
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+      transition: opacity .3s, color .3s
+    }
+
+    .tnav a:hover {
+      opacity: 1;
+      color: var(--amber)
+    }
+
+    @media(max-width:780px) {
+      .tnav {
+        display: none
+      }
+    }
+
+    /* ============ SCROLL-BLEED HERO ============ */
+    .scrollhero {
+      height: 380vh;
+      position: relative;
+      background: var(--ink)
+    }
+
+    .stage {
+      position: sticky;
+      top: 0;
+      height: 100svh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: clamp(24px, 3vw, 40px) clamp(22px, 6vw, 124px) clamp(38px, 5vw, 58px)
+    }
+
+    .stage .topbar {
+      position: relative;
+      z-index: 6
+    }
+
+    .bleed {
+      position: absolute;
+      left: 50%;
+      top: 56%;
+      width: 42vmax;
+      height: 42vmax;
+      border-radius: 50%;
+      z-index: 1;
+      background: radial-gradient(circle at 42% 40%, var(--amber-lo), var(--amber) 45%, var(--ember) 130%);
+      transform: translate(-50%, -50%) scale(calc(var(--p, 0)*9.2));
+      transform-origin: center;
+      filter: blur(calc((1 - var(--p, 0))*6px));
+      will-change: transform
+    }
+
+    .heart {
+      position: absolute;
+      left: 50%;
+      top: 56%;
+      z-index: 4;
+      color: #fff;
+      transform: translate(-50%, -50%) scale(calc(.3 + var(--p, 0)*7)) rotate(calc(var(--p, 0)*200deg));
+      opacity: calc(.15 + var(--p, 0)*.8);
+      will-change: transform;
+      pointer-events: none
+    }
+
+    .heart svg {
+      width: 60px;
+      height: 60px
+    }
+
+    .particles {
+      position: absolute;
+      inset: 0;
+      z-index: 3;
+      pointer-events: none;
+      opacity: calc(var(--p, 0)*.85)
+    }
+
+    .particles .spark {
+      position: absolute;
+      color: #fff;
+      will-change: transform
+    }
+
+    .stage-core {
+      position: relative;
+      z-index: 5;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 22px;
+      max-width: 1280px
+    }
+
+    .line {
+      font-family: var(--disp);
+      letter-spacing: -.02em;
+      line-height: .82;
+      font-size: clamp(58px, 13vw, 210px)
+    }
+
+    .line-dark {
+      font-weight: 600
+    }
+
+    .line-dark .ln {
+      display: block;
+      overflow: hidden
+    }
+
+    .line-dark .ln i {
+      display: block;
+      font-style: normal;
+      transform: translateY(110%);
+      transition: transform 1s var(--ease)
+    }
+
+    body.ready .line-dark .ln:nth-child(1) i {
+      transition-delay: .05s
+    }
+
+    body.ready .line-dark .ln:nth-child(2) i {
+      transition-delay: .16s
+    }
+
+    body.ready .line-dark .ln i {
+      transform: none
+    }
+
+    .line-dark {
+      opacity: clamp(0, calc((.4 - var(--p, 0))/.36), 1);
+      transform: translateY(calc(var(--p, 0)*-34px))
+    }
+
+    .line-dark b {
+      font-weight: 900
+    }
+
+    .line-dark .dim {
+      -webkit-text-stroke: 1.4px var(--paper);
+      color: transparent
+    }
+
+    .line-amber {
+      position: absolute;
+      color: var(--ink);
+      font-weight: 900;
+      font-style: italic;
+      opacity: clamp(0, calc((var(--p, 0) - .52)/.32), 1);
+      transform: translateY(calc((1 - var(--p, 0))*30px))
+    }
+
+    .hero-sub {
+      max-width: 520px;
+      font-size: clamp(15px, 1.25vw, 18px);
+      line-height: 1.6;
+      font-weight: 400;
+      opacity: clamp(0, calc((.32 - var(--p, 0))/.32), .72)
+    }
+
+    .stage-foot {
+      position: relative;
+      z-index: 5;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 22px;
+      flex-wrap: wrap
+    }
+
+    .stage-foot .hero-cta {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      opacity: clamp(0, calc((.28 - var(--p, 0))/.28), 1)
+    }
+
+    .progress {
+      font-family: var(--mono);
+      font-size: 10.5px;
+      letter-spacing: .28em;
+      text-transform: uppercase;
+      color: var(--ink);
+      opacity: calc(var(--p, 0));
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      font-weight: 500
+    }
+
+    .scrollcue {
+      font-family: var(--mono);
+      font-size: 10.5px;
+      letter-spacing: .28em;
+      text-transform: uppercase;
+      opacity: clamp(0, calc((.22 - var(--p, 0))/.22), .5);
+      display: flex;
+      align-items: center;
+      gap: 9px
+    }
+
+    .scrollcue .spark {
+      animation: bob 2.4s var(--ease) infinite
+    }
+
+    @keyframes bob {
+
+      0%,
+      100% {
+        transform: translateY(0)
+      }
+
+      50% {
+        transform: translateY(4px)
+      }
+    }
+
+    /* reduced-motion static hero */
+    .rmstatic .scrollhero {
+      height: auto
+    }
+
+    .rmstatic .stage {
+      position: static;
+      height: 100svh
+    }
+
+    .rmstatic .bleed {
+      transform: translate(-50%, -50%) scale(1);
+      filter: none
+    }
+
+    .rmstatic .heart {
+      opacity: .9;
+      transform: translate(-50%, -50%) scale(4)
+    }
+
+    .rmstatic .line-dark {
+      opacity: 0
+    }
+
+    .rmstatic .line-dark .ln i {
+      transform: none
+    }
+
+    .rmstatic .line-amber {
+      opacity: 1;
+      transform: none
+    }
+
+    .rmstatic .hero-sub,
+    .rmstatic .hero-cta {
+      opacity: .72
+    }
+
+    .rmstatic .particles {
+      display: none
+    }
+
+    /* marquee */
+    .marquee {
+      padding: 20px 0;
+      background: var(--amber);
+      color: var(--ink);
+      overflow: hidden;
+      border-top: 1px solid rgba(20, 15, 9, .18);
+      border-bottom: 1px solid rgba(20, 15, 9, .18)
+    }
+
+    .marquee .track {
+      display: flex;
+      gap: 30px;
+      white-space: nowrap;
+      width: max-content;
+      font-family: var(--disp);
+      font-weight: 800;
+      font-size: clamp(22px, 3vw, 40px);
+      letter-spacing: -.01em;
+      animation: scroll 24s linear infinite;
+      transition: transform .2s ease-out
+    }
+
+    @keyframes scroll {
+      to {
+        transform: translateX(-50%)
+      }
+    }
+
+    /* vision */
+    .vision .quote {
+      font-family: var(--disp);
+      font-weight: 600;
+      letter-spacing: -.015em;
+      line-height: .98;
+      font-size: clamp(38px, 7.2vw, 112px);
+      max-width: 15ch
+    }
+
+    .vision .quote b {
+      font-weight: 900;
+      color: var(--amber)
+    }
+
+    .vision .quote .w {
+      display: inline-block;
+      overflow: hidden;
+      vertical-align: top
+    }
+
+    .vision .quote .w i {
+      display: inline-block;
+      font-style: normal;
+      transform: translateY(110%);
+      transition: transform .8s var(--ease)
+    }
+
+    .vision .quote.in .w i {
+      transform: none
+    }
+
+    .vision .attrib {
+      margin-top: 40px;
+      font-family: var(--mono);
+      font-size: 11.5px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      opacity: .6;
+      max-width: 56ch;
+      line-height: 2.1;
+      font-weight: 400
+    }
+
+    /* method */
+    .method {
+      display: grid;
+      gap: clamp(42px, 5vw, 76px)
+    }
+
+    .method-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 24px;
+      flex-wrap: wrap
+    }
+
+    .method-head h2 {
+      font-family: var(--disp);
+      font-weight: 700;
+      letter-spacing: -.02em;
+      line-height: .9;
+      font-size: clamp(38px, 6vw, 84px);
+      max-width: 15ch
+    }
+
+    .method-head h2 em {
+      font-style: italic;
+      color: var(--ember)
+    }
+
+    .phases {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 1px;
+      background: var(--line-l);
+      border: 1px solid var(--line-l);
+      border-radius: 14px;
+      overflow: hidden
+    }
+
+    .phase {
+      background: var(--paper);
+      padding: clamp(24px, 2.2vw, 34px);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      transition: background .4s, transform .5s var(--ease)
+    }
+
+    .phase:hover {
+      background: var(--paper-2)
+    }
+
+    .phase .pnum {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: .2em;
+      color: var(--ember);
+      font-weight: 500
+    }
+
+    .phase h3 {
+      font-family: var(--disp);
+      font-weight: 700;
+      font-size: clamp(23px, 2vw, 30px);
+      letter-spacing: -.01em;
+      line-height: 1
+    }
+
+    .phase p {
+      font-size: 14.5px;
+      line-height: 1.55;
+      color: var(--muted-l)
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: auto
+    }
+
+    .chips span {
+      font-family: var(--mono);
+      font-size: 9.5px;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      border: 1px solid var(--line-l);
+      border-radius: 20px;
+      padding: 5px 10px;
+      color: var(--muted-l)
+    }
+
+    /* proof intro */
+    .proof-intro .big {
+      font-family: var(--disp);
+      font-weight: 600;
+      letter-spacing: -.02em;
+      line-height: .94;
+      font-size: clamp(36px, 6.4vw, 92px);
+      max-width: 18ch;
+      margin-top: 26px
+    }
+
+    .proof-intro .big b {
+      font-weight: 900;
+      color: var(--amber)
+    }
+
+    .stats {
+      display: flex;
+      gap: clamp(30px, 5vw, 90px);
+      flex-wrap: wrap;
+      margin-top: 56px;
+      border-top: 1px solid var(--line-d);
+      padding-top: 36px
+    }
+
+    .stat .n {
+      font-family: var(--disp);
+      font-weight: 500;
+      font-size: clamp(52px, 6.5vw, 104px);
+      line-height: .9;
+      color: var(--amber)
+    }
+
+    .stat .l {
+      font-family: var(--mono);
+      font-size: 10.5px;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      opacity: .6;
+      margin-top: 12px;
+      font-weight: 400
+    }
+
+    /* region + gallery */
+    .region-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 24px;
+      flex-wrap: wrap;
+      border-bottom: 1px solid;
+      padding-bottom: 24px;
+      margin-bottom: clamp(36px, 4vw, 60px)
+    }
+
+    .dark .region-head {
+      border-color: var(--line-d)
+    }
+
+    .pale .region-head {
+      border-color: var(--line-l)
+    }
+
+    .region-head h2 {
+      font-family: var(--disp);
+      font-weight: 900;
+      letter-spacing: -.03em;
+      line-height: .76;
+      font-size: clamp(56px, 12vw, 168px);
+      will-change: transform
+    }
+
+    .region-head .meta {
+      font-family: var(--mono);
+      font-size: 10.5px;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      text-align: right;
+      opacity: .6;
+      line-height: 2;
+      font-weight: 400
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: clamp(22px, 2.4vw, 36px)
+    }
+
+    .card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      transition: transform .5s var(--ease)
+    }
+
+    .card a.hit {
+      position: absolute;
+      inset: 0;
+      z-index: 3
+    }
+
+    .pv {
+      position: relative;
+      border-radius: 15px;
+      overflow: hidden;
+      border: 1px solid var(--line-d);
+      background: #0c0906;
+      box-shadow: 0 24px 60px -34px rgba(0, 0, 0, .75);
+      transition: border-color .4s, box-shadow .5s
+    }
+
+    .pale .pv {
+      border-color: var(--line-l)
+    }
+
+    .card:hover .pv {
+      border-color: var(--amber);
+      box-shadow: 0 34px 70px -30px rgba(184, 78, 0, .45)
+    }
+
+    .pv .chrome {
+      height: 32px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0 12px;
+      background: var(--ink-2)
+    }
+
+    .pale .pv .chrome {
+      background: #ddd4c2
+    }
+
+    .pv .chrome i {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, .26)
+    }
+
+    .pale .pv .chrome i {
+      background: rgba(0, 0, 0, .2)
+    }
+
+    .pv .chrome .url {
+      margin-left: 10px;
+      flex: 1;
+      height: 16px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, .08);
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: .06em;
+      color: var(--muted-d);
+      display: flex;
+      align-items: center;
+      padding: 0 10px
+    }
+
+    .pale .pv .chrome .url {
+      background: rgba(0, 0, 0, .05);
+      color: var(--muted-l)
+    }
+
+    .pv .screenwrap {
+      overflow: hidden
+    }
+
+    .pv .screen {
+      display: block;
+      width: 100%;
+      aspect-ratio: 16/10;
+      background: var(--paper);
+      will-change: transform
+    }
+
+    .pv .screen svg {
+      display: block;
+      width: 100%;
+      height: 100%
+    }
+
+    .pv::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: var(--amber);
+      opacity: 0;
+      transition: opacity .5s;
+      pointer-events: none;
+      mix-blend-mode: multiply
+    }
+
+    .card:hover .pv::after {
+      opacity: .09
+    }
+
+    .card .meta {
+      display: flex;
+      flex-direction: column;
+      gap: 8px
+    }
+
+    .card .top {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 12px
+    }
+
+    .card .nm {
+      font-family: var(--disp);
+      font-weight: 800;
+      font-size: clamp(24px, 2vw, 32px);
+      letter-spacing: -.015em;
+      line-height: .94
+    }
+
+    .card .yr {
+      font-family: var(--mono);
+      font-size: 10.5px;
+      letter-spacing: .1em;
+      opacity: .55;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      white-space: nowrap
+    }
+
+    .card .live {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--amber)
+    }
+
+    .card:hover .live {
+      animation: ping 1.4s ease-out infinite
+    }
+
+    @keyframes ping {
+      0% {
+        box-shadow: 0 0 0 0 rgba(255, 165, 3, .6)
+      }
+
+      100% {
+        box-shadow: 0 0 0 9px rgba(255, 165, 3, 0)
+      }
+    }
+
+    .card .tag {
+      font-family: var(--mono);
+      font-size: 9.5px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      opacity: .5;
+      font-weight: 400
+    }
+
+    .card .dsc {
+      font-size: 13.5px;
+      line-height: 1.55;
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      transition: max-height .5s var(--ease), opacity .4s
+    }
+
+    .dark .card .dsc {
+      color: var(--muted-d)
+    }
+
+    .pale .card .dsc {
+      color: var(--muted-l)
+    }
+
+    .card:hover .dsc,
+    .card:focus-within .dsc {
+      max-height: 120px;
+      opacity: 1
+    }
+
+    /* footer */
+    .foot {
+      min-height: 92svh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between
+    }
+
+    .foot h2 {
+      font-family: var(--disp);
+      font-weight: 600;
+      letter-spacing: -.02em;
+      line-height: .86;
+      font-size: clamp(52px, 10vw, 168px);
+      max-width: 12ch
+    }
+
+    .foot h2 .aw {
+      color: var(--amber);
+      font-style: italic;
+      font-weight: 900
+    }
+
+    .loop {
+      font-family: var(--mono);
+      font-size: clamp(10.5px, 1vw, 12px);
+      letter-spacing: .24em;
+      text-transform: uppercase;
+      display: flex;
+      gap: 13px;
+      flex-wrap: wrap;
+      opacity: .6;
+      align-items: center;
+      font-weight: 400
+    }
+
+    .loop .spark {
+      color: var(--amber);
+      opacity: 1
+    }
+
+    .foot-grid {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 30px;
+      flex-wrap: wrap;
+      border-top: 1px solid var(--line-d);
+      padding-top: 30px
+    }
+
+    .foot-grid .contact {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: .08em;
+      line-height: 2.1;
+      opacity: .7;
+      font-weight: 400
+    }
+
+    .rv {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity .85s var(--ease), transform .85s var(--ease)
+    }
+
+    .rv.in {
+      opacity: 1;
+      transform: none
+    }
+
+    .rv.d1 {
+      transition-delay: .08s
+    }
+
+    .rv.d2 {
+      transition-delay: .16s
+    }
+
+    .rv.d3 {
+      transition-delay: .24s
+    }
+
+    @media(prefers-reduced-motion:reduce) {
+      .marquee .track {
+        animation: none
+      }
+
+      .card:hover {
+        transform: none
+      }
+
+      .heart,
+      .bleed {
+        transition: none
+      }
+
+      .region-head h2,
+      .pv .screen {
+        transform: none !important
+      }
+    }
+
+    @media(max-width:640px) {
+      .line {
+        line-height: .86
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <template id="sparkTpl"><span class="spark"><svg width="1em" height="1em" viewBox="0 0 24 24" aria-hidden="true">
+        <path class="sp-path"
+          d="M12 0C13.2 8 16 10.8 24 12C16 13.2 13.2 16 12 24C10.8 16 8 13.2 0 12C8 10.8 10.8 8 12 0Z" />
+      </svg></span></template>
+  <template id="logoTpl"><svg viewBox="0 0 285 293" aria-hidden="true">
+      <path
+        d="M52.0702 44.766L130.78 5.64675C135.105 3.49711 139.915 7.53528 138.546 12.1672L102.555 133.943C102.059 135.621 100.798 136.966 99.1551 137.568L70.6256 148.029C65.3674 149.957 65.9764 157.582 71.4739 158.651L85.9109 161.458C89.0872 162.076 91.0572 165.276 90.178 168.39L79.2166 207.212C78.7848 208.741 77.716 210.011 76.2827 210.697L10.5712 242.165C6.35527 244.183 1.6913 240.386 2.81327 235.849L49.1626 48.3913C49.5525 46.8146 50.6157 45.4889 52.0702 44.766Z"
+        fill="#FFA503" />
+      <path
+        d="M232.07 247.461L153.361 286.58C149.035 288.73 144.226 284.692 145.595 280.06L181.586 158.284C182.081 156.605 183.342 155.261 184.985 154.658L213.515 144.198C218.773 142.27 218.164 134.645 212.667 133.576L198.23 130.769C195.053 130.151 193.083 126.951 193.963 123.837L204.924 85.0152C205.356 83.4859 206.425 82.2161 207.858 81.5298L273.569 50.0623C277.785 48.0434 282.449 51.8404 281.327 56.3781L234.978 243.835C234.588 245.412 233.525 246.738 232.07 247.461Z"
+        fill="#FFA503" />
+      <circle cx="139.172" cy="147.172" r="31.1719" fill="#FFA503" />
+      <path fill-rule="evenodd" clip-rule="evenodd"
+        d="M149.681 140.701C145.878 137.666 147.597 124.313 147.597 124.313C147.597 124.313 140.483 137.29 134.236 140.094C127.988 142.899 110.086 146.771 110.086 146.771C110.086 146.771 128.841 145.557 132.315 152.841C135.788 160.125 134.236 170.031 134.236 170.031C134.236 170.031 138.379 157.743 145.878 152.841C153.085 148.131 168.273 146.965 168.273 146.965C168.273 146.965 156.239 145.935 149.681 140.701Z"
+        fill="white" />
+    </svg></template>
+
+  <div class="grain"></div>
+  <div class="scrollbar" id="sbar"></div>
+
+  <div id="pre">
+    <span class="spin spark"><svg width="46" height="46" viewBox="0 0 24 24">
+        <path class="sp-path"
+          d="M12 0C13.2 8 16 10.8 24 12C16 13.2 13.2 16 12 24C10.8 16 8 13.2 0 12C8 10.8 10.8 8 12 0Z" />
+      </svg></span>
+    <div class="wm"><span>HOVERSIGHT</span></div>
+    <div class="pct" id="pct">00</div>
+  </div>
+  <div class="cur" id="cur"></div>
+
+  <!-- ============ SCROLL-BLEED HERO ============ -->
+  <div class="scrollhero" id="scrollhero">
+    <div class="stage" id="stage">
+      <div class="topbar">
+        <div class="brand"><span class="logo lg"></span><span class="wm">Hoversight</span></div>
+        <nav class="tnav"><a href="#vision">vision</a><a href="#method">method</a><a href="#proof">proof</a><a
+            href="#contact">contact</a></nav>
+        <a class="cta" href="https://booking.hoversight.agency/">Book a call</a>
+      </div>
+
+      <div class="bleed" aria-hidden="true"></div>
+      <span class="heart" aria-hidden="true"><svg viewBox="0 0 24 24">
+          <path fill="#fff"
+            d="M12 0C13.2 8 16 10.8 24 12C16 13.2 13.2 16 12 24C10.8 16 8 13.2 0 12C8 10.8 10.8 8 12 0Z" />
+        </svg></span>
+      <div class="particles" id="particles" aria-hidden="true"></div>
+
+      <div class="stage-core">
+        <div class="eyebrow scrollcue"><span class="sk"></span>Your outsourced tech department</div>
+        <div style="position:relative">
+          <h1 class="line line-dark"><span class="ln"><i>We don't <b>build&nbsp;it</b></i></span><span
+              class="ln"><i><span class="dim">and disappear.</span></i></span></h1>
+          <h1 class="line line-amber">We move in.</h1>
+        </div>
+        <p class="hero-sub">The technical team you don't have to hire, manage, or replace — engineers working inside
+          your business, for as long as you need them.</p>
+      </div>
+
+      <div class="stage-foot">
+        <div class="hero-cta">
+          <a class="cta" href="#proof">See the proof <span class="sk"></span></a>
+          <a class="cta ghost" href="#method">How we work</a>
+        </div>
+        <div class="progress"><span class="sk"></span>Moving in…</div>
+        <div class="scrollcue"><span class="sk"></span>Scroll</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="marquee" aria-hidden="true">
+    <div class="track" id="track"><span id="mq"></span><span id="mq2"></span></div>
+  </div>
+
+  <section class="dark vision" id="vision">
+    <div class="eyebrow rv" style="margin-bottom:36px"><span class="sk"></span>The vision</div>
+    <p class="quote" id="visionQuote" data-text="Software doesn't fail from bad code. It fails from having &no owner.&">
+    </p>
+    <p class="attrib rv">A vendor sells the vision and hands you a login. A freelancer builds what you asked and
+      disappears. Hoversight stays — one team that knows your systems and carries what it learns forward.</p>
+  </section>
+
+  <section class="pale method" id="method">
+    <div class="method-head rv">
+      <h2>Five steps. Then we start the <em>next five.</em></h2>
+      <div class="eyebrow" style="opacity:.6"><span class="sk"></span>How we work</div>
+    </div>
+    <div class="phases">
+      <div class="phase rv"><span class="pnum">01</span>
+        <h3>We watch first</h3>
+        <p>We talk to the people doing the work, until we can write one clear sentence about what success means.</p>
+        <div class="chips"><span>Discovery</span><span>Shadowing</span></div>
+      </div>
+      <div class="phase rv d1"><span class="pnum">02</span>
+        <h3>Smallest proof</h3>
+        <p>The smallest version that proves the idea on your real data, with your real team using it.</p>
+        <div class="chips"><span>Scope</span><span>Ship small</span></div>
+      </div>
+      <div class="phase rv d2"><span class="pnum">03</span>
+        <h3>We check our work</h3>
+        <p>Where AI is involved, we define a right answer on real examples before calling it done.</p>
+        <div class="chips"><span>Evals</span><span>QA</span></div>
+      </div>
+      <div class="phase rv d3"><span class="pnum">04</span>
+        <h3>Stay for the risky part</h3>
+        <p>The first weeks after launch are when problems show up. We're watching closely.</p>
+        <div class="chips"><span>Launch</span><span>On call</span></div>
+      </div>
+      <div class="phase rv d3"><span class="pnum">05</span>
+        <h3>Carry it forward</h3>
+        <p>We keep it working, support it, and build whatever comes next.</p>
+        <div class="chips"><span>Support</span><span>Repeat →</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="dark proof-intro" id="proof">
+    <div class="eyebrow rv"><span class="sk"></span>Proof of work · field report</div>
+    <p class="big rv">Not a portfolio of demos. <b>Fourteen systems, live</b>, across three regions — each one still
+      owned by us.</p>
+    <div class="stats rv">
+      <div class="stat">
+        <div class="n" data-count="14">14</div>
+        <div class="l">Systems live</div>
+      </div>
+      <div class="stat">
+        <div class="n" data-count="3">03</div>
+        <div class="l">Regions</div>
+      </div>
+      <div class="stat">
+        <div class="n">∞</div>
+        <div class="l">Continuity</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="dark" id="negros" style="padding-top:0">
+    <div class="region-head rv">
+      <h2 data-px="1">Negros</h2>
+      <div class="meta">Region 01 · PH<br>06 systems live<br>Bacolod · Island-wide</div>
+    </div>
+    <div class="gallery" id="g-negros"></div>
+  </section>
+  <section class="pale" id="iloilo">
+    <div class="region-head rv">
+      <h2 data-px="-1">Iloilo</h2>
+      <div class="meta">Region 02 · PH<br>04 systems live<br>Western Visayas</div>
+    </div>
+    <div class="gallery" id="g-iloilo"></div>
+  </section>
+  <section class="dark" id="canada">
+    <div class="region-head rv">
+      <h2 data-px="1">Canada</h2>
+      <div class="meta">Region 03 · Global<br>04 systems live<br>Remote-work elite</div>
+    </div>
+    <div class="gallery" id="g-canada"></div>
+  </section>
+
+  <section class="dark foot" id="contact">
+    <div>
+      <div class="eyebrow rv" style="margin-bottom:34px"><span class="sk"></span>Start here</div>
+      <h2 class="rv">Come with the <span class="aw">messy</span> version.</h2>
+    </div>
+    <div class="rv">
+      <div class="loop" style="margin-bottom:40px"><span>Discovery</span><span class="sk"></span><span>Build</span><span
+          class="sk"></span><span>Support</span><span class="sk"></span><span>Repeat</span></div>
+      <div class="foot-grid">
+        <div class="brand"><span class="logo lg"></span><span class="wm">Hoversight</span></div>
+        <div class="contact">info@hoversight.agency<br>+63 910 000 4878<br>hoversight.agency</div>
+        <a class="cta" href="https://booking.hoversight.agency/">Book a call <span class="sk"></span></a>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const rm = matchMedia('(prefers-reduced-motion:reduce)').matches;
+    if (rm) document.documentElement.classList.add('rmstatic');
+    const sparkSVG = document.getElementById('sparkTpl').innerHTML;
+    const logoSVG = document.getElementById('logoTpl').innerHTML;
+    document.querySelectorAll('.sk').forEach(el => el.innerHTML = sparkSVG);
+    document.querySelectorAll('.logo.lg').forEach(el => el.innerHTML = logoSVG);
+
+    /* vision quote → word-split reveal (& marks the amber bold word) */
+    (function () {
+      const q = document.getElementById('visionQuote');
+      const words = q.dataset.text.split(' ');
+      q.innerHTML = words.map(w => {
+        const amb = w.includes('&'); const t = w.replace(/&/g, '');
+        return `<span class="w" style="transition-delay:${Math.random() * .15}s"><i>${amb ? '<b>' + t + '</b>' : t}</i></span>`
+      }).join(' ');
+    })();
+
+    /* ---------- app-preview mockups (SVG, in-brand) ---------- */
+    const INK = '#140F09', AM = '#FFA503', AMlo = '#FFE0A6', PAP = '#FFFFFF', G = '#D9D2C4', G2 = '#EFEAE0', TX = '#8A8375';
+    const S = c => `<svg viewBox="0 0 400 250" xmlns="http://www.w3.org/2000/svg"><rect width="400" height="250" fill="${PAP}"/>${c}</svg>`;
+    const lab = t => `<text x="16" y="26" font-family="monospace" font-size="10" letter-spacing="1.5" fill="${INK}">${t}</text>`;
+    const T = {
+      dashboard: t => S(`${lab(t)}<rect x="16" y="42" width="70" height="196" rx="6" fill="${G2}"/>
+  ${[0, 1, 2, 3, 4].map(i => `<rect x="26" y="${56 + i * 22}" width="50" height="7" rx="3" fill="${i == 1 ? AM : G}"/>`).join('')}
+  <rect x="100" y="42" width="88" height="52" rx="6" fill="${G2}"/><rect x="196" y="42" width="88" height="52" rx="6" fill="${G2}"/><rect x="292" y="42" width="92" height="52" rx="6" fill="${AM}"/>
+  <text x="110" y="66" font-family="sans-serif" font-size="9" fill="${TX}">TODAY</text><text x="110" y="84" font-family="sans-serif" font-size="16" font-weight="700" fill="${INK}">2,480</text>
+  <rect x="100" y="106" width="284" height="132" rx="6" fill="${G2}"/>
+  ${[40, 72, 55, 90, 64, 110, 48, 84].map((h, i) => `<rect x="${116 + i * 32}" y="${222 - h}" width="18" height="${h}" rx="3" fill="${i == 5 ? AM : INK}"/>`).join('')}`),
+      crm: t => S(`${lab(t)}<rect x="16" y="42" width="368" height="26" rx="5" fill="${INK}"/><text x="26" y="59" font-family="monospace" font-size="9" fill="${PAP}">NAME · STATUS · VALUE</text>
+  ${[0, 1, 2, 3, 4, 5].map(i => `<rect x="16" y="${74 + i * 27}" width="368" height="22" rx="4" fill="${i % 2 ? G2 : PAP}" stroke="${G}"/>
+   <rect x="24" y="${80 + i * 27}" width="10" height="10" rx="2" fill="${G}"/><rect x="44" y="${81 + i * 27}" width="120" height="8" rx="4" fill="${INK}" opacity=".7"/>
+   <rect x="250" y="${80 + i * 27}" width="52" height="12" rx="6" fill="${i % 3 == 0 ? AM : G}"/><rect x="320" y="${81 + i * 27}" width="50" height="8" rx="4" fill="${G}"/>`).join('')}`),
+      cards: t => S(`${lab(t)}${[0, 1, 2].map(c => [0, 1].map(r => {
+        const x = 16 + c * 128, y = 44 + r * 100; return `<rect x="${x}" y="${y}" width="116" height="88" rx="7" fill="${G2}"/>
+   <rect x="${x}" y="${y}" width="116" height="52" rx="7" fill="${(c + r) % 3 == 0 ? AM : '#CFC7B6'}"/><rect x="${x + 10}" y="${y + 60}" width="74" height="7" rx="3" fill="${INK}" opacity=".7"/><rect x="${x + 10}" y="${y + 72}" width="44" height="6" rx="3" fill="${G}"/>`
+      }).join('')).join('')}`),
+      calendar: t => S(`${lab(t)}<rect x="16" y="42" width="368" height="196" rx="6" fill="${G2}"/>
+  ${Array.from({ length: 35 }).map((_, i) => { const c = i % 7, r = (i / 7) | 0; return `<rect x="${28 + c * 50}" y="${58 + r * 34}" width="42" height="28" rx="4" fill="${PAP}" stroke="${G}"/>` }).join('')}
+  <polyline points="${Array.from({ length: 7 }).map((_, i) => `${49 + i * 50},${120 + Math.sin(i * 1.1) * 38}`).join(' ')}" fill="none" stroke="${AM}" stroke-width="3"/>
+  ${Array.from({ length: 7 }).map((_, i) => `<circle cx="${49 + i * 50}" cy="${120 + Math.sin(i * 1.1) * 38}" r="3.5" fill="${INK}"/>`).join('')}`),
+      editorial: t => S(`<rect width="400" height="250" fill="${INK}"/><text x="24" y="34" font-family="monospace" font-size="10" letter-spacing="2" fill="${AM}">${t}</text>
+  <text x="24" y="120" font-family="sans-serif" font-size="58" font-weight="800" fill="${PAP}" letter-spacing="-2">ISSUE</text>
+  <text x="24" y="172" font-family="sans-serif" font-size="58" font-weight="800" fill="${AM}" letter-spacing="-2">N°01</text>
+  ${[0, 1, 2].map(i => `<rect x="${24 + i * 118}" y="196" width="104" height="6" rx="3" fill="${PAP}" opacity=".5"/><rect x="${24 + i * 118}" y="208" width="80" height="6" rx="3" fill="${PAP}" opacity=".3"/>`).join('')}`),
+      phone: (t, qr) => S(`<rect width="400" height="250" fill="${AMlo}"/><rect x="150" y="20" width="100" height="210" rx="18" fill="${INK}"/><rect x="158" y="30" width="84" height="190" rx="10" fill="${PAP}"/>
+  <rect x="182" y="34" width="36" height="5" rx="2.5" fill="${INK}"/><text x="168" y="58" font-family="monospace" font-size="7" fill="${INK}">${t}</text>
+  ${qr ? `<rect x="172" y="70" width="56" height="56" rx="4" fill="${PAP}" stroke="${INK}"/>${Array.from({ length: 36 }).map((_, i) => ((i * 7) % 5 > 1) ? `<rect x="${177 + (i % 6) * 8}" y="${75 + ((i / 6) | 0) * 8}" width="7" height="7" fill="${INK}"/>` : '').join('')}
+   <rect x="177" y="75" width="16" height="16" fill="${PAP}" stroke="${INK}" stroke-width="3"/><rect x="207" y="75" width="16" height="16" fill="${PAP}" stroke="${AM}" stroke-width="3"/>
+   <rect x="172" y="136" width="56" height="9" rx="4" fill="${AM}"/><rect x="172" y="150" width="40" height="7" rx="3" fill="${G}"/>`
+          : `${Array.from({ length: 6 }).map((_, i) => { const c = i % 2, r = (i / 2) | 0; return `<rect x="${172 + c * 30}" y="${70 + r * 36}" width="26" height="30" rx="6" fill="${i == 2 ? AM : G2}"/>` }).join('')}
+   <rect x="172" y="182" width="56" height="8" rx="4" fill="${INK}" opacity=".7"/><rect x="172" y="196" width="40" height="7" rx="3" fill="${G}"/>`}`)
+    };
+    const DATA = {
+      negros: [["Coyo's", "Bakery OS", "'26", "All-in-one bakery operations: production, inventory across outlets, automated orders, real-time insight.", "dashboard", "COYO'S · OPS"],
+      ["Grand Trillium PMSS", "Real-estate CRM", "'26", "Property lifecycle management, financial tracking, and client relations in one CRM.", "crm", "TRILLIUM · PIPELINE"],
+      ["DOMUS Real Estate", "Brokerage", "'26", "Premium brokerage, appraisal, and development across Bacolod and Negros Island.", "cards", "DOMUS · LISTINGS"],
+      ["Kristin's Steakhouse", "Hospitality", "'25", "Bacolod steakhouse and catering — superb steaks, excellent service, events.", "cards", "KRISTIN'S · MENU"],
+      ["HoverScan", "QR ordering", "'26", "Contact-less QR ordering — browse digital menus and order instantly from mobile.", "phone", "HOVERSCAN", true],
+      ["Cyber Motorbikes", "Loan lifecycle", "'26", "Digitizes the full motorcycle-loan lifecycle from inquiry to account closure.", "crm", "CYBER · LOANS"]],
+      iloilo: [["STARPower", "Solar business OS", "'26", "Quotations, estimates, budgeting, procurement, inventory, operations, accounting.", "dashboard", "STARPOWER · QUOTES"],
+      ["HealthyKitchen App", "Restaurant ops", "'26", "Inventory, recipes, sales, and BIR compliance for Philippine restaurants.", "dashboard", "HEALTHYKITCHEN"],
+      ["SMAPS SIS", "School system", "'25", "K-12 School Information System — enrollment, records, accounting, multi-year setup.", "crm", "SMAPS · ROSTER"],
+      ["Cornelius Magnate", "Consulting site", "'25", "Consulting and training presence — manage leads, update content, connect.", "editorial", "CORNELIUS"]],
+      canada: [["MIB — Modern Institute of Business", "Certification", "'26", "Gold standard for Filipino Virtual Professionals — certification to global placement.", "cards", "MIB · CERTS"],
+      ["BLVD", "Editorial + sponsorship", "'26", "Lifestyle magazine for the remote-work elite with integrated sponsorship intelligence.", "editorial", "BLVD"],
+      ["Judith", "Cashflow calendar", "'25", "Smart family cashflow calendar — projected daily balance, shared household finances.", "calendar", "JUDITH · CASHFLOW"],
+      ["Pulse", "Conglomerate OS", "'26", "AI-assisted mobile OS — institutional memory, project execution, marketing feedback.", "phone", "PULSE", false]]
+    };
+    const screen = (tpl, l, ex) => tpl === 'phone' ? T.phone(l, ex) : T[tpl](l);
+    function cardHTML(name, tag, yr, desc, tpl, l, ex) {
+      const dom = name.toLowerCase().replace(/[^a-z0-9]+/g, '').slice(0, 14);
+      return `<article class="card rv"><a class="hit" href="#proof" aria-label="${name}"></a>
+   <div class="pv"><div class="chrome"><i></i><i></i><i></i><span class="url">${dom}.hoversight.app</span></div>
+     <div class="screenwrap"><div class="screen">${screen(tpl, l, ex)}</div></div></div>
+   <div class="meta"><div class="top"><div class="nm">${name}</div><div class="yr"><span class="live"></span>${yr}</div></div>
+     <div class="tag">${tag}</div><div class="dsc">${desc}</div></div></article>`;
+    }
+    for (const rg of ['negros', 'iloilo', 'canada'])
+      document.getElementById('g-' + rg).innerHTML = DATA[rg].map((p, i) => cardHTML(...p).replace('class="card rv"', `class="card rv d${i % 3}"`)).join('');
+
+    /* marquee */
+    const mqText = " · Discovery · Build · Support · Repeat · Fourteen systems live · Negros · Iloilo · Canada";
+    mq.textContent = mqText; mq2.textContent = mqText;
+
+    /* particles */
+    const P = document.getElementById('particles');
+    const parts = [];
+    if (!rm) {
+      for (let i = 0; i < 16; i++) {
+        const s = document.createElement('span'); s.className = 'spark'; s.innerHTML = sparkSVG;
+        const sz = 7 + Math.random() * 22; s.style.left = Math.random() * 100 + '%'; s.style.top = Math.random() * 100 + '%';
+        s.style.fontSize = sz + 'px'; s.style.opacity = .25 + Math.random() * .5; s.dataset.sp = (0.4 + Math.random() * 1.4).toFixed(2); P.appendChild(s); parts.push(s);
+      }
+    }
+
+    /* preloader */
+    const pre = document.getElementById('pre'), pct = document.getElementById('pct');
+    function finish() { pre.classList.add('done'); document.body.classList.add('ready'); kickReveal() }
+    if (rm) { pct.textContent = '100'; document.body.classList.add('ready'); setTimeout(finish, 120) }
+    else { let v = 0; const t = setInterval(() => { v += Math.random() * 10 + 4; if (v >= 100) { v = 100; clearInterval(t); setTimeout(finish, 360) } pct.textContent = String(Math.floor(v)).padStart(2, '0') }, 90) }
+
+    /* cursor */
+    const cur = document.getElementById('cur'); let cx = innerWidth / 2, cy = innerHeight / 2, tx = cx, ty = cy;
+    addEventListener('mousemove', e => { tx = e.clientX; ty = e.clientY });
+    (function loop() { cx += (tx - cx) * .22; cy += (ty - cy) * .22; cur.style.transform = `translate(${cx}px,${cy}px) translate(-50%,-50%)`; requestAnimationFrame(loop) })();
+    function bindCur() {
+      document.querySelectorAll('.card,.cta,.tnav a,.phase').forEach(el => {
+        el.addEventListener('mouseenter', () => cur.classList.add('big')); el.addEventListener('mouseleave', () => cur.classList.remove('big'))
+      })
+    }
+
+    /* ===== global scroll driver ===== */
+    const hero = document.getElementById('scrollhero'), stage = document.getElementById('stage'), sbar = document.getElementById('sbar'), track = document.getElementById('track');
+    const regionH = [...document.querySelectorAll('.region-head h2')];
+    const screens = [...document.querySelectorAll('.pv .screen')];
+    let lastY = scrollY, vel = 0, ticking = false;
+    function frame() {
+      const y = scrollY, vh = innerHeight, doc = document.documentElement.scrollHeight - vh;
+      sbar.style.width = (y / (doc || 1) * 100) + '%';
+      if (!rm) {
+        const max = hero.offsetHeight - vh;
+        const p = Math.min(1, Math.max(0, (-hero.getBoundingClientRect().top) / (max || 1)));
+        stage.style.setProperty('--p', p.toFixed(4));
+        parts.forEach(s => { s.style.transform = `translateY(${-p * parseFloat(s.dataset.sp) * 140}px)` });
+        vel += ((y - lastY) - vel) * .2; lastY = y;
+        track.style.transform = `skewX(${Math.max(-6, Math.min(6, vel * .14))}deg)`;
+        regionH.forEach(h => {
+          const r = h.getBoundingClientRect(); if (r.bottom > 0 && r.top < vh) {
+            const c = (r.top + r.height / 2 - vh / 2) / vh; h.style.transform = `translateX(${c * 40 * (+h.dataset.px)}px)`
+          }
+        });
+        screens.forEach(s => {
+          const r = s.getBoundingClientRect(); if (r.bottom > 0 && r.top < vh) {
+            const c = (r.top + r.height / 2 - vh / 2) / vh; s.style.transform = `translateY(${c * -16}px) scale(1.06)`
+          }
+        });
+      }
+      ticking = false;
+    }
+    addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(frame) } }, { passive: true });
+    addEventListener('resize', frame);
+
+    /* count-up */
+    function countUp(el) {
+      const target = +el.dataset.count, pad = el.textContent.length; let v = 0;
+      const step = () => {
+        v += Math.max(1, target / 28); if (v >= target) { el.textContent = String(target).padStart(pad, '0'); return }
+        el.textContent = String(Math.floor(v)).padStart(pad, '0'); requestAnimationFrame(step)
+      }; step();
+    }
+
+    /* reveal + observers */
+    let io;
+    function kickReveal() {
+      io = new IntersectionObserver(es => es.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('in');
+          if (e.target.id === 'visionQuote') e.target.classList.add('in');
+          if (e.target.dataset && e.target.dataset.count && !rm) countUp(e.target);
+          io.unobserve(e.target)
+        }
+      }), { threshold: .14, rootMargin: '0px 0px -6% 0px' });
+      document.querySelectorAll('.rv,#visionQuote,[data-count]').forEach(el => rm ? el.classList.add('in') : io.observe(el));
+      bindCur(); frame();
+    }
+  </script>
 </body>
+
 </html>
