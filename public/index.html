@@ -264,7 +264,18 @@
     .topbar {
       display: flex;
       justify-content: space-between;
-      align-items: center
+      align-items: center;
+      position: sticky;
+      top: 16px;
+      z-index: 100;
+      padding: 12px 24px;
+      background: rgba(20, 15, 9, 0.72);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--line-d);
+      border-radius: 100px;
+      box-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.6);
+      transition: background .4s var(--ease), border-color .4s;
     }
 
     .brand {
@@ -275,7 +286,12 @@
 
     .brand .logo {
       width: 36px;
-      height: 37px
+      height: 37px;
+      transition: transform .5s var(--ease)
+    }
+
+    .brand:hover .logo {
+      transform: rotate(180deg);
     }
 
     .brand .wm {
@@ -289,24 +305,27 @@
 
     .tnav {
       display: flex;
-      gap: 8px
+      gap: 6px
     }
 
     .tnav a {
+      position: relative;
       font-family: var(--mono);
       font-size: 11px;
       text-transform: lowercase;
-      opacity: .6;
-      padding: 10px 12px;
-      min-height: 44px;
+      opacity: .7;
+      padding: 8px 14px;
+      min-height: 38px;
       display: inline-flex;
       align-items: center;
-      transition: opacity .3s, color .3s
+      border-radius: 20px;
+      transition: opacity .3s, color .3s, background .3s
     }
 
-    .tnav a:hover {
+    .tnav a:hover, .tnav a.active {
       opacity: 1;
-      color: var(--amber)
+      color: var(--amber);
+      background: rgba(255, 165, 3, 0.08);
     }
 
     @media(max-width:780px) {
@@ -1111,6 +1130,317 @@
       }
     }
 
+    /* 3D Tilt Card and Radial Spotlight */
+    .card {
+      transform-style: preserve-3d;
+      perspective: 1000px;
+      cursor: pointer;
+    }
+
+    .pv .glow-spot {
+      position: absolute;
+      inset: 0;
+      border-radius: 15px;
+      background: radial-gradient(350px circle at var(--mx, 50%) var(--my, 50%), rgba(255, 165, 3, 0.22), transparent 70%);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      z-index: 4;
+    }
+
+    .card:hover .glow-spot {
+      opacity: 1;
+    }
+
+    .card.filtered-out {
+      display: none !important;
+    }
+
+    /* Filter Bar */
+    .filter-bar {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 32px;
+      margin-bottom: 24px;
+    }
+
+    .filter-btn {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 9px 20px;
+      border-radius: 30px;
+      border: 1px solid var(--line-d);
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--paper);
+      cursor: pointer;
+      transition: all 0.3s var(--ease);
+    }
+
+    .filter-btn:hover, .filter-btn.active {
+      background: var(--amber);
+      color: var(--ink);
+      border-color: var(--amber);
+      box-shadow: 0 4px 18px rgba(255, 165, 3, 0.35);
+    }
+
+    /* Terminal Console */
+    .console-sec {
+      background: var(--ink);
+      border-top: 1px solid var(--line-d);
+    }
+
+    .term-window {
+      background: #0a0704;
+      border: 1px solid var(--amber-lo);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 30px 90px -20px rgba(0, 0, 0, 0.8), 0 0 30px rgba(255, 165, 3, 0.08);
+      font-family: var(--mono);
+      margin-top: 40px;
+    }
+
+    .term-header {
+      background: var(--ink-2);
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--line-d);
+    }
+
+    .term-dots {
+      display: flex;
+      gap: 8px;
+    }
+
+    .term-dots span {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      display: block;
+    }
+
+    .term-dots .d-red { background: #ff5f56; }
+    .term-dots .d-yellow { background: #ffbd2e; }
+    .term-dots .d-green { background: #27c93f; }
+
+    .term-title {
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      color: var(--muted-d);
+      text-transform: uppercase;
+    }
+
+    .term-body {
+      padding: 24px;
+      min-height: 280px;
+      max-height: 420px;
+      overflow-y: auto;
+      font-size: 12.5px;
+      line-height: 1.8;
+      color: var(--paper);
+    }
+
+    .term-line {
+      margin-bottom: 6px;
+      word-break: break-word;
+    }
+
+    .term-line .cmd {
+      color: var(--amber);
+      font-weight: 600;
+    }
+
+    .term-line .res {
+      opacity: 0.9;
+    }
+
+    .term-line .green {
+      color: #4ade80;
+    }
+
+    .term-line .amber-bold {
+      color: var(--amber);
+      font-weight: bold;
+    }
+
+    .term-input-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .term-prompt {
+      color: var(--amber);
+      font-weight: bold;
+    }
+
+    .term-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      font-family: var(--mono);
+      font-size: 13px;
+      color: var(--paper);
+      caret-color: var(--amber);
+    }
+
+    .term-pills {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      padding: 14px 24px 20px;
+      background: #070503;
+      border-top: 1px dashed var(--line-d);
+    }
+
+    .term-pill {
+      font-family: var(--mono);
+      font-size: 10.5px;
+      letter-spacing: 0.08em;
+      padding: 5px 12px;
+      border-radius: 14px;
+      background: rgba(255, 165, 3, 0.08);
+      color: var(--amber);
+      border: 1px solid rgba(255, 165, 3, 0.25);
+      cursor: pointer;
+      transition: all 0.25s var(--ease);
+    }
+
+    .term-pill:hover {
+      background: var(--amber);
+      color: var(--ink);
+      border-color: var(--amber);
+    }
+
+    /* Modal System Log */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 10000;
+      background: rgba(10, 7, 4, 0.85);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.35s var(--ease), visibility 0.35s;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal-card {
+      background: var(--ink);
+      border: 1px solid var(--amber);
+      box-shadow: 0 24px 80px rgba(255, 165, 3, 0.25);
+      border-radius: 20px;
+      max-width: 640px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 36px;
+      position: relative;
+      color: var(--paper);
+      transform: translateY(24px) scale(0.95);
+      transition: transform 0.35s var(--ease);
+    }
+
+    .modal-overlay.active .modal-card {
+      transform: translateY(0) scale(1);
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      color: var(--paper);
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      transition: all 0.2s;
+    }
+
+    .modal-close:hover {
+      background: var(--amber);
+      color: var(--ink);
+    }
+
+    .modal-tag {
+      font-family: var(--mono);
+      font-size: 10.5px;
+      letter-spacing: 0.18em;
+      color: var(--amber);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .modal-title {
+      font-family: var(--disp);
+      font-size: clamp(32px, 4.5vw, 48px);
+      font-weight: 800;
+      line-height: 0.95;
+    }
+
+    .modal-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 14px;
+      margin: 24px 0;
+      padding: 18px;
+      background: var(--ink-2);
+      border-radius: 12px;
+      border: 1px solid var(--line-d);
+    }
+
+    .modal-stat-label {
+      font-family: var(--mono);
+      font-size: 9.5px;
+      letter-spacing: 0.12em;
+      opacity: 0.6;
+      text-transform: uppercase;
+    }
+
+    .modal-stat-val {
+      font-family: var(--mono);
+      font-size: 14px;
+      color: var(--amber);
+      font-weight: 600;
+      margin-top: 4px;
+    }
+
+    .modal-desc {
+      font-size: 15px;
+      line-height: 1.65;
+      opacity: 0.9;
+      margin-bottom: 24px;
+    }
+
+    .modal-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid var(--line-d);
+      padding-top: 20px;
+    }
+
     @media(max-width:640px) {
       .line {
         line-height: .86
@@ -1254,6 +1584,15 @@
         <div class="l">Continuity</div>
       </div>
     </div>
+    
+    <div class="filter-bar rv">
+      <button class="filter-btn active" data-filter="all">All Systems (14)</button>
+      <button class="filter-btn" data-filter="negros">Negros (06)</button>
+      <button class="filter-btn" data-filter="iloilo">Iloilo (04)</button>
+      <button class="filter-btn" data-filter="canada">Canada (04)</button>
+      <button class="filter-btn" data-filter="dashboard">Dashboards</button>
+      <button class="filter-btn" data-filter="crm">CRM & Pipeline</button>
+    </div>
   </section>
 
   <section class="dark" id="negros" style="padding-top:0">
@@ -1278,6 +1617,43 @@
     <div class="gallery" id="g-canada"></div>
   </section>
 
+  <!-- ============ INTERACTIVE TERMINAL CONSOLE ============ -->
+  <section class="dark console-sec" id="console">
+    <div class="eyebrow rv"><span class="sk"></span>Interactive Console · Live Terminal</div>
+    <div class="method-head rv" style="margin-top: 14px">
+      <h2>Query our <em>live infrastructure.</em></h2>
+    </div>
+    <div class="term-window rv">
+      <div class="term-header">
+        <div class="term-dots">
+          <span class="d-red"></span>
+          <span class="d-yellow"></span>
+          <span class="d-green"></span>
+        </div>
+        <div class="term-title">hoversight-cli v2.4.0 — bash</div>
+        <div style="width: 45px"></div>
+      </div>
+      <div class="term-body" id="termBody">
+        <div class="term-line"><span class="amber-bold">Hoversight Terminal Console</span> — Type <span class="cmd">help</span> for available commands.</div>
+        <div class="term-line" style="opacity:0.65; font-size:11px">Connected to edge cluster [ph-west-1]. Click any quick command pill below.</div>
+        <div class="term-output" id="termOutput"></div>
+        <div class="term-input-row">
+          <span class="term-prompt">guest@hoversight:~$</span>
+          <input type="text" class="term-input" id="termInput" placeholder="type command (e.g. help, systems, status)..." autocomplete="off" spellcheck="false">
+        </div>
+      </div>
+      <div class="term-pills">
+        <span class="term-pill" data-cmd="help">help</span>
+        <span class="term-pill" data-cmd="systems">systems</span>
+        <span class="term-pill" data-cmd="regions">regions</span>
+        <span class="term-pill" data-cmd="status">status</span>
+        <span class="term-pill" data-cmd="about">about</span>
+        <span class="term-pill" data-cmd="book">book</span>
+        <span class="term-pill" data-cmd="clear">clear</span>
+      </div>
+    </div>
+  </section>
+
   <section class="dark foot" id="contact">
     <div>
       <div class="eyebrow rv" style="margin-bottom:34px"><span class="sk"></span>Start here</div>
@@ -1293,6 +1669,38 @@
       </div>
     </div>
   </section>
+
+  <!-- ============ SYSTEM FIELD REPORT MODAL ============ -->
+  <div id="sysModal" class="modal-overlay" aria-hidden="true">
+    <div class="modal-card">
+      <button class="modal-close" id="modalClose" aria-label="Close modal">&times;</button>
+      <div class="modal-tag" id="mTag">SYSTEM FIELD REPORT</div>
+      <h3 class="modal-title" id="mTitle">System Name</h3>
+      <div class="modal-grid">
+        <div>
+          <div class="modal-stat-label">REGION & DEPLOYMENT</div>
+          <div class="modal-stat-val" id="mRegion">Bacolod · PH</div>
+        </div>
+        <div>
+          <div class="modal-stat-label">STATUS & CONTINUITY</div>
+          <div class="modal-stat-val" id="mStatus">Active · Managed</div>
+        </div>
+        <div>
+          <div class="modal-stat-label">OPERATIONAL TYPE</div>
+          <div class="modal-stat-val" id="mType">Dashboard OS</div>
+        </div>
+        <div>
+          <div class="modal-stat-label">MANAGED SINCE</div>
+          <div class="modal-stat-val" id="mYr">'26</div>
+        </div>
+      </div>
+      <div class="modal-desc" id="mDesc">Description of the system...</div>
+      <div class="modal-footer">
+        <div style="font-family: var(--mono); font-size: 11px; opacity: 0.7;">Continuity Guarantee · 100% Owned & Maintained</div>
+        <a class="cta" href="https://booking.hoversight.agency/" target="_blank" rel="noopener">Discuss Similar System</a>
+      </div>
+    </div>
+  </div>
 
   <script>
     const rm = matchMedia('(prefers-reduced-motion:reduce)').matches;
@@ -1364,20 +1772,200 @@
       ["Pulse", "Conglomerate OS", "'26", "AI-assisted mobile OS — institutional memory, project execution, marketing feedback.", "phone", "PULSE", false]]
     };
     const screen = (tpl, l, ex) => tpl === 'phone' ? T.phone(l, ex) : T[tpl](l);
-    function cardHTML(name, tag, yr, desc, tpl, l, ex) {
+    function cardHTML(name, tag, yr, desc, tpl, l, ex, region) {
       const dom = name.toLowerCase().replace(/[^a-z0-9]+/g, '').slice(0, 14);
-      return `<article class="card rv"><a class="hit" href="#proof" aria-label="${name}"></a>
-   <div class="pv"><div class="chrome"><i></i><i></i><i></i><span class="url">${dom}.hoversight.app</span></div>
+      return `<article class="card rv" data-name="${name}" data-tag="${tag}" data-yr="${yr}" data-desc="${desc}" data-region="${region}" data-tpl="${tpl}"><a class="hit" href="javascript:void(0)" aria-label="${name}"></a>
+   <div class="pv"><div class="glow-spot"></div><div class="chrome"><i></i><i></i><i></i><span class="url">${dom}.hoversight.app</span></div>
      <div class="screenwrap"><div class="screen">${screen(tpl, l, ex)}</div></div></div>
    <div class="meta"><div class="top"><div class="nm">${name}</div><div class="yr"><span class="live"></span>${yr}</div></div>
      <div class="tag">${tag}</div><div class="dsc">${desc}</div></div></article>`;
     }
     for (const rg of ['negros', 'iloilo', 'canada'])
-      document.getElementById('g-' + rg).innerHTML = DATA[rg].map((p, i) => cardHTML(...p).replace('class="card rv"', `class="card rv d${i % 3}"`)).join('');
+      document.getElementById('g-' + rg).innerHTML = DATA[rg].map((p, i) => cardHTML(...p, rg).replace('class="card rv"', `class="card rv d${i % 3}"`)).join('');
 
     /* marquee */
     const mqText = " · Discovery · Build · Support · Repeat · Fourteen systems live · Negros · Iloilo · Canada";
     mq.textContent = mqText; mq2.textContent = mqText;
+
+    /* 3D Card Tilt & Interactive Modal */
+    function bindCardEvents() {
+      document.querySelectorAll('.card').forEach(card => {
+        card.addEventListener('mousemove', e => {
+          if (rm) return;
+          const rect = card.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          const centerX = rect.width / 2;
+          const centerY = rect.height / 2;
+          const rotateX = ((y - centerY) / centerY) * -9;
+          const rotateY = ((x - centerX) / centerX) * 9;
+          card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+          card.style.setProperty('--mx', `${(x / rect.width) * 100}%`);
+          card.style.setProperty('--my', `${(y / rect.height) * 100}%`);
+        });
+
+        card.addEventListener('mouseleave', () => {
+          card.style.transform = 'none';
+        });
+
+        card.addEventListener('click', () => {
+          openSystemModal({
+            name: card.dataset.name,
+            tag: card.dataset.tag,
+            yr: card.dataset.yr,
+            desc: card.dataset.desc,
+            region: card.dataset.region,
+            tpl: card.dataset.tpl
+          });
+        });
+      });
+    }
+
+    const modal = document.getElementById('sysModal');
+    const mClose = document.getElementById('modalClose');
+    function openSystemModal(data) {
+      const regionNames = { negros: 'Negros Island · PH', iloilo: 'Iloilo · Western Visayas', canada: 'Canada · Global Remote' };
+      const typeNames = { dashboard: 'Operations Dashboard OS', crm: 'CRM & Lifecycle Management', cards: 'Catalog & Brokerage Platform', calendar: 'Smart Cashflow Calendar', editorial: 'Digital Editorial Platform', phone: 'Mobile QR & Executive OS' };
+      document.getElementById('mTitle').textContent = data.name;
+      document.getElementById('mTag').textContent = `SYSTEM FIELD REPORT · ${data.tag}`;
+      document.getElementById('mRegion').textContent = regionNames[data.region] || data.region;
+      document.getElementById('mStatus').textContent = 'Live · Continuity Active';
+      document.getElementById('mType').textContent = typeNames[data.tpl] || 'Custom Tech OS';
+      document.getElementById('mYr').textContent = data.yr;
+      document.getElementById('mDesc').textContent = data.desc + " Full continuous engineering, active monitoring, evaluation suites, and dedicated maintenance provided by Hoversight.";
+      modal.classList.add('active');
+      modal.setAttribute('aria-hidden', 'false');
+    }
+
+    function closeModal() {
+      modal.classList.remove('active');
+      modal.setAttribute('aria-hidden', 'true');
+    }
+    mClose.addEventListener('click', closeModal);
+    modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
+    addEventListener('keydown', e => { if (e.key === 'Escape' && modal.classList.contains('active')) closeModal(); });
+
+    /* Gallery Filter System */
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const filter = btn.dataset.filter;
+        document.querySelectorAll('.card').forEach(card => {
+          if (filter === 'all') {
+            card.classList.remove('filtered-out');
+          } else if (filter === 'negros' || filter === 'iloilo' || filter === 'canada') {
+            card.classList.toggle('filtered-out', card.dataset.region !== filter);
+          } else {
+            card.classList.toggle('filtered-out', card.dataset.tpl !== filter);
+          }
+        });
+      });
+    });
+
+    /* Interactive Terminal Console */
+    const termInput = document.getElementById('termInput');
+    const termOutput = document.getElementById('termOutput');
+    const termBody = document.getElementById('termBody');
+    const cmdHistory = [];
+    let historyIdx = -1;
+
+    const COMMANDS = {
+      help: () => `Available Hoversight CLI commands:<br>
+  - <span class="cmd">systems</span> : List all 14 live systems and active status<br>
+  - <span class="cmd">regions</span> : View active regional footprints (Negros, Iloilo, Canada)<br>
+  - <span class="cmd">status</span>  : Show edge cluster metrics & eval pass rates<br>
+  - <span class="cmd">about</span>   : Mission statement & core engineering philosophy<br>
+  - <span class="cmd">book</span>    : Schedule direct alignment call<br>
+  - <span class="cmd">clear</span>   : Clear terminal window`,
+
+      systems: () => `<span class="green">14 Systems Live & Managed:</span><br>
+  [PH-01] Coyo's Bakery OS · Grand Trillium CRM · DOMUS Real Estate<br>
+  [PH-02] Kristin's Steakhouse · HoverScan QR · Cyber Motorbikes<br>
+  [PH-03] STARPower Solar OS · HealthyKitchen App · SMAPS SIS · Cornelius Magnate<br>
+  [CA-01] MIB Virtual Pro Cert · BLVD Magazine · Judith Cashflow · Pulse OS`,
+
+      regions: () => `<span class="amber-bold">Active Operational Footprints:</span><br>
+  01. Negros (PH) — 06 Systems (Bacolod & Island-wide Ops)<br>
+  02. Iloilo (PH) — 04 Systems (Western Visayas Tech Department)<br>
+  03. Canada (Global) — 04 Systems (Remote-work Elite)`,
+
+      status: () => `<span class="green">✔ Infrastructure Health: OPTIMAL</span><br>
+  - Cluster: ph-west-1 (Edge Routing)<br>
+  - System Uptime: 99.99%<br>
+  - Evaluation Pass Rate: 99.8% on real production benchmarks<br>
+  - Active Engineering Continuity: 14/14 systems guarded`,
+
+      about: () => `Software doesn't fail from bad code. It fails from having no owner.<br>
+  <span class="amber-bold">Hoversight</span> moves in as your outsourced technical department — building, shipping, evaluating, and staying.`,
+
+      book: () => `<span class="green">Ready to move in?</span><br>
+  Direct booking page: <a href="https://booking.hoversight.agency/" target="_blank" style="color:var(--amber);text-decoration:underline;">booking.hoversight.agency</a><br>
+  Email: info@hoversight.agency | Phone: +63 910 000 4878`
+    };
+
+    function execCommand(rawCmd) {
+      const cmd = rawCmd.trim().toLowerCase();
+      if (!cmd) return;
+      cmdHistory.push(cmd);
+      historyIdx = cmdHistory.length;
+
+      const line = document.createElement('div');
+      line.className = 'term-line';
+      line.innerHTML = `<span class="term-prompt">guest@hoversight:~$</span> <span class="cmd">${escapeHTML(cmd)}</span>`;
+      termOutput.appendChild(line);
+
+      if (cmd === 'clear') {
+        termOutput.innerHTML = '';
+      } else if (COMMANDS[cmd]) {
+        const res = document.createElement('div');
+        res.className = 'term-line res';
+        res.innerHTML = COMMANDS[cmd]();
+        termOutput.appendChild(res);
+      } else {
+        const err = document.createElement('div');
+        err.className = 'term-line res';
+        err.innerHTML = `<span style="color:#ef4444">Command not found: '${escapeHTML(cmd)}'.</span> Type <span class="cmd">help</span> for available commands.`;
+        termOutput.appendChild(err);
+      }
+
+      termBody.scrollTop = termBody.scrollHeight;
+    }
+
+    function escapeHTML(str) {
+      return str.replace(/[&<>'"]/g, tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag));
+    }
+
+    if (termInput) {
+      termInput.addEventListener('keydown', e => {
+        if (e.key === 'Enter') {
+          execCommand(termInput.value);
+          termInput.value = '';
+        } else if (e.key === 'ArrowUp') {
+          if (historyIdx > 0) {
+            historyIdx--;
+            termInput.value = cmdHistory[historyIdx] || '';
+          }
+        } else if (e.key === 'ArrowDown') {
+          if (historyIdx < cmdHistory.length - 1) {
+            historyIdx++;
+            termInput.value = cmdHistory[historyIdx] || '';
+          } else {
+            historyIdx = cmdHistory.length;
+            termInput.value = '';
+          }
+        }
+      });
+    }
+
+    document.querySelectorAll('.term-pill').forEach(pill => {
+      pill.addEventListener('click', () => {
+        const cmd = pill.dataset.cmd;
+        if (termInput) termInput.value = cmd;
+        execCommand(cmd);
+        if (termInput) termInput.value = '';
+      });
+    });
 
     /* particles */
     const P = document.getElementById('particles');
@@ -1401,7 +1989,7 @@
     addEventListener('mousemove', e => { tx = e.clientX; ty = e.clientY });
     (function loop() { cx += (tx - cx) * .22; cy += (ty - cy) * .22; cur.style.transform = `translate(${cx}px,${cy}px) translate(-50%,-50%)`; requestAnimationFrame(loop) })();
     function bindCur() {
-      document.querySelectorAll('.card,.cta,.tnav a,.phase').forEach(el => {
+      document.querySelectorAll('.card,.cta,.tnav a,.phase,.filter-btn,.term-pill').forEach(el => {
         el.addEventListener('mouseenter', () => cur.classList.add('big')); el.addEventListener('mouseleave', () => cur.classList.remove('big'))
       })
     }
@@ -1458,6 +2046,7 @@
         }
       }), { threshold: .14, rootMargin: '0px 0px -6% 0px' });
       document.querySelectorAll('.rv,#visionQuote,[data-count]').forEach(el => rm ? el.classList.add('in') : io.observe(el));
+      bindCardEvents();
       bindCur(); frame();
     }
   </script>
