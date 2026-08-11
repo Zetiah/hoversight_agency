@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hoversight — Your Outsourced Tech Department</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#14181c;
+    --panel:#1b2126;
+    --panel-2:#20272d;
+    --ink:#ece8de;
+    --ink-dim:#9aa3ab;
+    --ink-faint:#5b656d;
+    --amber:#f2a93b;
+    --amber-dim:#8a6321;
+    --teal:#4fbf8b;
+    --line:#2a3138;
+    --line-strong:#39424a;
+    --font-display:'Big Shoulders Display', sans-serif;
+    --font-body:'IBM Plex Sans', sans-serif;
+    --font-mono:'IBM Plex Mono', monospace;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--font-body);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;}
+  ::selection{background:var(--amber);color:#1a1300;}
+  :focus-visible{outline:2px solid var(--amber);outline-offset:3px;}
+
+  .wrap{max-width:1120px;margin:0 auto;padding:0 32px;}
+  .eyebrow{
+    font-family:var(--font-mono);
+    font-size:12px;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color:var(--amber);
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .eyebrow::before{content:"";width:7px;height:7px;background:var(--amber);display:inline-block;}
+  .eyebrow.teal{color:var(--teal);}
+  .eyebrow.teal::before{background:var(--teal);}
+
+  /* NAV */
+  nav{
+    position:sticky;top:0;z-index:50;
+    background:rgba(20,24,28,0.92);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--line);
+  }
+  nav .inner{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:18px 32px;max-width:1120px;margin:0 auto;
+  }
+  .logo{
+    font-family:var(--font-display);
+    font-weight:900;
+    font-size:22px;
+    letter-spacing:0.02em;
+    display:flex;align-items:center;gap:10px;
+  }
+  .logo .dot{width:9px;height:9px;background:var(--amber);display:inline-block;}
+  .logo-icon{height:51px;width:auto;display:block;}
+  nav .links{display:flex;gap:28px;font-size:14px;color:var(--ink-dim);}
+  nav .links a{text-decoration:none;transition:color .15s;}
+  nav .links a:hover{color:var(--ink);}
+  .btn{
+    font-family:var(--font-mono);
+    font-size:13px;
+    letter-spacing:0.03em;
+    padding:11px 20px;
+    border:1px solid var(--amber);
+    color:var(--amber);
+    background:transparent;
+    text-decoration:none;
+    display:inline-flex;align-items:center;gap:8px;
+    transition:background .15s, color .15s;
+  }
+  .btn:hover{background:var(--amber);color:#1a1300;}
+  .btn-ghost{border-color:var(--line-strong);color:var(--ink-dim);}
+  .btn-ghost:hover{background:var(--panel-2);color:var(--ink);}
+
+  /* HERO */
+  header.hero{
+    padding:88px 0 72px;
+    position:relative;
+  }
+  .reticle{position:relative;padding:56px 48px;border:1px solid var(--line-strong);}
+  .reticle::before,.reticle::after,
+  .reticle .c2::before,.reticle .c2::after{
+    content:"";position:absolute;width:22px;height:22px;
+  }
+  .reticle::before{top:-1px;left:-1px;border-top:2px solid var(--amber);border-left:2px solid var(--amber);}
+  .reticle::after{top:-1px;right:-1px;border-top:2px solid var(--amber);border-right:2px solid var(--amber);}
+  .reticle .c2::before{bottom:-1px;left:-1px;border-bottom:2px solid var(--amber);border-left:2px solid var(--amber);position:absolute;}
+  .reticle .c2::after{bottom:-1px;right:-1px;border-bottom:2px solid var(--amber);border-right:2px solid var(--amber);position:absolute;}
+
+  .hero-grid{display:grid;grid-template-columns:1.15fr 0.85fr;gap:56px;align-items:center;perspective:1400px;}
+  h1{
+    font-family:var(--font-display);
+    font-weight:900;
+    font-size:clamp(40px,5.2vw,68px);
+    line-height:1.02;
+    letter-spacing:-0.01em;
+    margin:18px 0 22px;
+  }
+  h1 em{font-style:normal;color:var(--amber);}
+  .hero-sub{font-size:17px;color:var(--ink-dim);max-width:46ch;margin:0 0 32px;}
+  .hero-actions{display:flex;gap:14px;align-items:center;flex-wrap:wrap;}
+  .hero-note{
+    font-family:var(--font-mono);font-size:12.5px;color:var(--ink-faint);
+    margin-top:18px;
+  }
+
+  /* TERMINAL PANEL */
+  .terminal{
+    background:var(--panel);
+    border:1px solid var(--line);
+    font-family:var(--font-mono);
+    font-size:12.5px;
+  }
+  .terminal-head{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:10px 16px;border-bottom:1px solid var(--line);
+    color:var(--ink-faint);
+  }
+  .terminal-head .status{display:flex;align-items:center;gap:8px;color:var(--teal);}
+  .terminal-head .status .pip{width:7px;height:7px;background:var(--teal);border-radius:50%;}
+  .terminal-body{padding:18px 16px;min-height:210px;}
+  .terminal-line{display:flex;gap:12px;margin-bottom:9px;opacity:0;animation:fadein .4s forwards;}
+  .terminal-line .t{color:var(--ink-faint);flex-shrink:0;}
+  .terminal-line .tag{color:var(--amber);flex-shrink:0;width:84px;}
+  .terminal-line .tag.ok{color:var(--teal);}
+  .terminal-line .msg{color:var(--ink-dim);}
+  .cursor{display:inline-block;width:7px;height:14px;background:var(--amber);vertical-align:middle;animation:blink 1s step-end infinite;}
+  @keyframes fadein{to{opacity:1;}}
+  @keyframes blink{50%{opacity:0;}}
+
+  /* SECTIONS */
+  section{padding:96px 0;border-top:1px solid var(--line);}
+  .section-head{margin-bottom:48px;}
+  h2{
+    font-family:var(--font-display);
+    font-weight:900;
+    font-size:clamp(30px,3.4vw,44px);
+    line-height:1.05;
+    margin:14px 0 0;
+    max-width:22ch;
+  }
+  .lede{font-size:16px;color:var(--ink-dim);max-width:60ch;margin-top:16px;}
+
+  /* PROBLEM LOG */
+  .log-list{border-top:1px solid var(--line);}
+  .log-item{
+    display:grid;grid-template-columns:120px 1fr;gap:24px;
+    padding:22px 0;border-bottom:1px solid var(--line);
+  }
+  .log-item .code{font-family:var(--font-mono);font-size:12px;color:var(--ink-faint);padding-top:3px;}
+  .log-item p{margin:0;font-size:15.5px;color:var(--ink-dim);}
+  .log-item strong{color:var(--ink);font-weight:500;}
+
+  /* MANIFESTO */
+  .manifesto{
+    display:grid;grid-template-columns:0.9fr 1.1fr;gap:64px;align-items:start;perspective:1200px;
+  }
+  .manifesto blockquote{
+    margin:0;font-family:var(--font-display);font-weight:700;
+    font-size:clamp(22px,2.4vw,30px);line-height:1.2;color:var(--ink);
+  }
+  .manifesto .body p{font-size:15.5px;color:var(--ink-dim);margin:0 0 16px;}
+
+  /* METHOD STEPS */
+  .steps{display:flex;flex-direction:column;}
+  .step{
+    display:grid;grid-template-columns:64px 1fr;gap:28px;
+    padding:32px 0;border-bottom:1px solid var(--line);
+  }
+  .step:first-child{border-top:1px solid var(--line);}
+  .step .num{
+    font-family:var(--font-display);font-weight:900;font-size:44px;color:var(--panel-2);
+    -webkit-text-stroke:1px var(--line-strong);
+  }
+  .step h3{
+    font-family:var(--font-body);font-weight:600;font-size:18px;margin:0 0 8px;color:var(--ink);
+  }
+  .step p{margin:0;font-size:15px;color:var(--ink-dim);max-width:60ch;}
+
+  /* FIT / NOT FIT */
+  .fit-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);}
+  .fit-col{background:var(--bg);padding:32px;}
+  .fit-col h3{
+    font-family:var(--font-mono);font-size:13px;letter-spacing:0.08em;text-transform:uppercase;
+    margin:0 0 20px;display:flex;align-items:center;gap:10px;
+  }
+  .beacon{width:9px;height:9px;border-radius:50%;display:inline-block;}
+  .beacon.green{background:var(--teal);}
+  .beacon.red{background:#d9633f;}
+  .fit-col ul{list-style:none;margin:0;padding:0;}
+  .fit-col li{
+    font-size:15px;color:var(--ink-dim);padding:12px 0;border-bottom:1px solid var(--line);
+  }
+  .fit-col li:last-child{border-bottom:none;}
+
+  /* ENGAGEMENT TIERS */
+  .tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);}
+  .tier{background:var(--bg);padding:32px 28px;display:flex;flex-direction:column;}
+  .tier.featured{background:var(--panel);border-top:2px solid var(--amber);}
+  .tier .tier-name{font-family:var(--font-mono);font-size:13px;text-transform:uppercase;letter-spacing:0.06em;color:var(--ink-faint);}
+  .tier.featured .tier-name{color:var(--amber);}
+  .tier .tier-price{font-family:var(--font-display);font-weight:900;font-size:32px;margin:10px 0 4px;}
+  .tier .tier-unit{font-size:13px;color:var(--ink-faint);margin-bottom:20px;}
+  .tier ul{list-style:none;margin:0 0 24px;padding:0;flex-grow:1;}
+  .tier li{font-size:14px;color:var(--ink-dim);padding:8px 0;border-bottom:1px solid var(--line);}
+  .tier li:last-child{border-bottom:none;}
+  .tier .btn{align-self:flex-start;}
+
+  /* CLOSING CTA */
+  .cta-final{text-align:left;padding:104px 0 96px;}
+  .cta-final h2{max-width:16ch;}
+  .cta-final .lede{margin-bottom:36px;}
+
+  footer{border-top:1px solid var(--line);padding:32px 0;}
+  footer .inner{
+    display:flex;justify-content:space-between;align-items:center;
+    font-family:var(--font-mono);font-size:12px;color:var(--ink-faint);
+  }
+
+  @media(max-width:860px){
+    .hero-grid,.manifesto{grid-template-columns:1fr;}
+    .fit-grid,.tiers{grid-template-columns:1fr;}
+    .log-item{grid-template-columns:1fr;gap:6px;}
+    .reticle{padding:36px 22px;}
+    nav .links{display:none;}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .terminal-line{animation:none;opacity:1;}
+    .cursor{animation:none;}
+  }
+
+  /* GSAP 3D STAGE — perspective lives on the parent, rotation on the child */
+  .stage-3d{perspective:1100px;}
+  .log-list{perspective:1400px;}
+  .steps{perspective:1400px;}
+  .fit-grid{perspective:1400px;}
+  .tiers{perspective:1600px;}
+  .log-item,.step,.fit-col,.tier,.terminal,.manifesto blockquote{
+    will-change:transform,opacity;
+    backface-visibility:hidden;
+  }
+
+  /* PROGRESS RAIL — signature motion element, ties to the status/beacon motif */
+  .progress-rail{position:fixed;top:0;left:0;height:2px;background:var(--amber);width:0%;z-index:60;transform-origin:left center;}
+  @media (prefers-reduced-motion: reduce){
+    .progress-rail{display:none;}
+  }
+
+  /* VARIANCE — lift the featured tier out of strict grid symmetry */
+  .tier.featured{transform:translateY(-14px);}
+  @media(max-width:860px){
+    .tier.featured{transform:none;}
+  }
+
+  /* ICONS */
+  .icon-svg{display:block;width:100%;height:100%;}
+  .step-head{display:flex;align-items:center;gap:14px;margin:0 0 10px;}
+  .step-head h3{margin:0;}
+  .step-icon{width:36px;height:36px;padding:8px;border:1px solid var(--line-strong);color:var(--amber);flex-shrink:0;}
+  .fit-col h3{gap:10px;}
+  .fit-icon{width:18px;height:18px;display:inline-flex;flex-shrink:0;}
+  .fit-icon.good{color:var(--teal);}
+  .fit-icon.bad{color:#d9633f;}
+  .tier-icon{width:30px;height:30px;color:var(--ink-faint);margin-bottom:16px;}
+  .tier.featured .tier-icon{color:var(--amber);}
+
+  /* TEXT ANIMATION — split-word/char wrappers */
+  .word,.char{display:inline-block;will-change:transform,opacity;}
+</style>
+</head>
+<body>
+<div class="progress-rail" id="progress-rail"></div>
+
+<nav>
+  <div class="inner">
+    <div class="logo"><img src="/logo.svg" alt="Hoversight" class="logo-icon">HOVERSIGHT</div>
+    <div class="links">
+      <a href="#problem">The problem</a>
+      <a href="#method">Method</a>
+      <a href="#fit">Fit</a>
+      <a href="#engagements">Partnership</a>
+    </div>
+    <a class="btn" href="https://pwyxai.hatchable.site/" target="_blank" rel="noopener noreferrer">Book a call →</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="reticle">
+      <div class="c2"></div>
+      <div class="hero-grid">
+        <div>
+          <div class="eyebrow">Your outsourced tech department</div>
+          <h1 aria-label="We don't build it and disappear. We move in.">We don't build it<br>and disappear.<br><em>We move in.</em></h1>
+          <p class="hero-sub">Hoversight is the technical team you don't have to hire, manage, or replace — engineers who work inside your business, building and looking after your systems for as long as you need them, not just until a contract ends.</p>
+          <div class="hero-actions">
+            <a class="btn" href="https://booking.hoversight.agency/" target="_blank" rel="noopener noreferrer">Book a call →</a>
+            <a class="btn btn-ghost" href="#method">See how we work</a>
+          </div>
+          <p class="hero-note">No demos. No decks. We start by watching how your team actually works today.</p>
+        </div>
+        <div class="terminal">
+          <div class="terminal-head">
+            <span>what we're working on</span>
+            <span class="status"><span class="pip"></span>live</span>
+          </div>
+          <div class="terminal-body" id="term"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section id="problem">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Field report</div>
+      <h2 aria-label="You've hired five vendors. You still don't have a tech team.">You've hired five vendors. You still don't have a tech team.</h2>
+      <p class="lede">A contractor built it, a freelancer patched it, an agency demoed something better and vanished. Here's what that actually leaves behind.</p>
+    </div>
+    <div class="log-list">
+      <div class="log-item">
+        <div class="code">SYM // 01</div>
+        <p>Someone still exports a spreadsheet by hand <strong>every Monday</strong>, because the last contractor's integration only ever half-worked.</p>
+      </div>
+      <div class="log-item">
+        <div class="code">SYM // 02</div>
+        <p>Three systems all claim to have the <strong>"real" number</strong> — and nobody on the team fully trusts any of them.</p>
+      </div>
+      <div class="log-item">
+        <div class="code">SYM // 03</div>
+        <p>There's a workaround duct-taped onto the process that <strong>only one person understands</strong>, and they left the company eight months ago.</p>
+      </div>
+      <div class="log-item">
+        <div class="code">SYM // 04</div>
+        <p>The AI feature everyone was excited about got <strong>quietly muted</strong> after it got something wrong in front of a client, and the agency that built it stopped returning calls.</p>
+      </div>
+      <div class="log-item">
+        <div class="code">SYM // 05</div>
+        <p>Every new project means <strong>re-explaining your business from scratch</strong> to whichever vendor won this quarter's bid.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="manifesto">
+      <blockquote>Software doesn't fail from bad code. It fails from having no owner.</blockquote>
+      <div class="body">
+        <p>A vendor sells you the vision and hands you a login. A freelancer builds exactly what you asked for and disappears. An agency charges you every month while relearning your business every quarter. None of them are still there when something breaks at 11pm, or when the next thing you need wasn't part of the original plan.</p>
+        <p>Hoversight isn't a one-and-done project shop. We work the way the best technical teams in the world do — we don't disappear once something's working. We stay on as your actual technical team: the people who build the next thing, look after the last thing, and pick up the phone in between.</p>
+        <p>That means one team that knows your business, your systems, and your data — instead of a new outside company for every new problem. We're reachable, not routed through a ticket queue. We carry what we've learned forward from one project to the next. We're there for the shaky first weeks after anything new goes live, and we're still there a year later when you need the next thing built.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="method">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow teal">How we work</div>
+      <h2 aria-label="Five steps. Then we start the next five.">Five steps. Then we start the next five.</h2>
+      <p class="lede">This isn't a sales pitch dressed up as a process. It's the actual order we work in — and unlike a one-off project, it doesn't end when step five is done. It just starts again on whatever you need built next.</p>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="num">01</div>
+        <div>
+          <div class="step-head">
+            <span class="step-icon"><svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"/><path d="M12 18c-.328 0 -.652 -.017 -.97 -.05c-3.172 -.332 -5.85 -2.315 -8.03 -5.95c2.4 -4 5.4 -6 9 -6c3.465 0 6.374 1.853 8.727 5.558"/><path d="M15 18a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"/><path d="M20.2 20.2l1.8 1.8"/></svg></span>
+            <h3>We watch before we touch anything</h3>
+          </div>
+          <p>We talk to the people actually doing the work, not just the owner or manager who called us in — and we watch how things really get done, until we can write one clear sentence: this works if [this specific number] goes from x to y.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="num">02</div>
+        <div>
+          <div class="step-head">
+            <span class="step-icon"><svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M11 12a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/><path d="M12 7a5 5 0 1 0 5 5"/><path d="M13 3.055a9 9 0 1 0 7.941 7.945"/><path d="M15 6v3h3l3 -3h-3v-3l-3 3"/><path d="M15 9l-3 3"/></svg></span>
+            <h3>We start with the smallest thing that proves it works</h3>
+          </div>
+          <p>No giant six-month plan. We pick the smallest, simplest version that proves the idea on your real information, with your real team using it — and we write down everything else we're holding off on for now, so nothing sneaks in later.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="num">03</div>
+        <div>
+          <div class="step-head">
+            <span class="step-icon"><svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9.615 20h-2.615a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v8"/><path d="M14 19l2 2l4 -4"/><path d="M9 8h4"/><path d="M9 12h2"/></svg></span>
+            <h3>We check our own work before calling it done</h3>
+          </div>
+          <p>Anywhere this involves AI, we decide what a "right answer" actually looks like — using real examples — before we consider the work finished. AI that hasn't been checked against real examples isn't ready, no matter how good the demo looked.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="num">04</div>
+        <div>
+          <div class="step-head">
+            <span class="step-icon"><svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 12h4l3 8l4 -16l3 8h4"/></svg></span>
+            <h3>We stick around for the risky part</h3>
+          </div>
+          <p>The first few weeks after something new goes live are when problems actually show up. Not because the work was wrong — because nobody was watching closely enough to catch it before your team did. We watch closely.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="num">05</div>
+        <div>
+          <div class="step-head">
+            <span class="step-icon"><svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -4v4h4"/><path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 4v-4h-4"/><path d="M11 12a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/></svg></span>
+            <h3>We stay, and we bring everything we've learned with us</h3>
+          </div>
+          <p>We write down what was specific to this project versus what should become a standard part of how your business runs — then we stay on as the team that keeps it working, supports it, and builds whatever comes next, already knowing everything from this round.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="fit">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Qualification</div>
+      <h2 aria-label="We're built for a relationship, not a quick job.">We're built for a relationship, not a quick job.</h2>
+      <p class="lede">We turn away work that's actually just a one-off job, because that's not what we're set up to do well. Here's how to tell if we're the right long-term fit.</p>
+    </div>
+    <div class="fit-grid">
+      <div class="fit-col">
+        <h3><span class="fit-icon good"><svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l5 5l10 -10"/></svg></span>Good fit</h3>
+        <ul>
+          <li>You want one technical partner for everything — new projects, connecting your systems together, and quick fixes when something breaks — instead of managing a different company for each.</li>
+          <li>You don't have (or don't want) a full in-house engineering team, but you need one to actually exist somewhere.</li>
+          <li>You're tired of re-explaining your business every time a new contractor starts.</li>
+          <li>Your systems and data are complex enough that continuity — someone who already knows where the bodies are buried — is worth more than a cheaper one-off quote.</li>
+        </ul>
+      </div>
+      <div class="fit-col">
+        <h3><span class="fit-icon bad"><svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M18 6l-12 12"/><path d="M6 6l12 12"/></svg></span>Not a fit</h3>
+        <ul>
+          <li>You need one clearly-defined project finished, with no ongoing relationship after.</li>
+          <li>You already have a capable in-house engineering team and just need extra hands short-term.</li>
+          <li>You're shopping purely on lowest hourly rate.</li>
+          <li>Nobody on your side is available to work directly with our team over time.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="engagements">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow teal">How we work together</div>
+      <h2 aria-label="We're a team, not a project. But there's a way in.">We're a team, not a project. But there's a way in.</h2>
+      <p class="lede">Every relationship starts with us getting to know your business. Most turn into ongoing support — that's the thing we're actually built to be.</p>
+    </div>
+    <div class="tiers">
+      <div class="tier">
+        <span class="tier-icon"><svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 16l2 -6l6 -2l-2 6l-6 2"/><path d="M3 12a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"/><path d="M12 3l0 2"/><path d="M12 19l0 2"/><path d="M3 12l2 0"/><path d="M19 12l2 0"/></svg></span>
+        <div class="tier-name">Getting to know you</div>
+        <div class="tier-price">2 weeks</div>
+        <div class="tier-unit">fixed price · the way in</div>
+        <ul>
+          <li>Conversations with your team + watching how work actually gets done</li>
+          <li>A clear map of how your business runs today, that you've confirmed is accurate</li>
+          <li>An agreed, specific goal for what success looks like</li>
+          <li>Our honest advice on how much ongoing help you'd actually need</li>
+        </ul>
+        <a class="btn btn-ghost" href="https://booking.hoversight.agency/" target="_blank" rel="noopener noreferrer">Ask us about this →</a>
+      </div>
+      <div class="tier featured">
+        <span class="tier-icon"><svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 13a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"/><path d="M8 21v-1a2 2 0 0 1 2 -2h4a2 2 0 0 1 2 2v1"/><path d="M15 5a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"/><path d="M17 10h2a2 2 0 0 1 2 2v1"/><path d="M5 5a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"/><path d="M3 13v-1a2 2 0 0 1 2 -2h2"/></svg></span>
+        <div class="tier-name">Your tech team</div>
+        <div class="tier-price">Ongoing</div>
+        <div class="tier-unit">monthly, our main way of working together</div>
+        <ul>
+          <li>One person (or small team) that's dedicated to your business</li>
+          <li>New projects, connecting your systems, and fixes handled as one ongoing list of work</li>
+          <li>Everything we've learned carried forward — you never start over explaining your business to someone new</li>
+          <li>Direct access to reach us, with priority response when something's broken</li>
+          <li>Regular check-ins on what's coming next, not just reacting when things break</li>
+        </ul>
+        <a class="btn" href="https://booking.hoversight.agency/" target="_blank" rel="noopener noreferrer">Book a call →</a>
+      </div>
+      <div class="tier">
+        <span class="tier-icon"><svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3l8 4.5l0 9l-8 4.5l-8 -4.5l0 -9l8 -4.5"/><path d="M12 12l8 -4.5"/><path d="M12 12l0 9"/><path d="M12 12l-8 -4.5"/><path d="M16 5.25l-8 4.5"/></svg></span>
+        <div class="tier-name">One-time project</div>
+        <div class="tier-price">Fixed price</div>
+        <div class="tier-unit">for a clearly defined, one-off need</div>
+        <ul>
+          <li>A working first version, tested against real examples to make sure it's accurate</li>
+          <li>Getting it live and making sure it keeps working in the first weeks</li>
+          <li>Clear, plain-language instructions for your team once we wrap up</li>
+          <li>Option to move into ongoing support afterward</li>
+        </ul>
+        <a class="btn btn-ghost" href="https://booking.hoversight.agency/" target="_blank" rel="noopener noreferrer">Ask us about this →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-final" id="cta">
+  <div class="wrap">
+    <div class="eyebrow">Start here</div>
+    <h2 aria-label="Come with the messy version of the problem.">Come with the messy version of the problem.</h2>
+    <p class="lede">The first conversation isn't a sales call — it's the first interview. We're not trying to close a deal this quarter. We're trying to figure out if we're the team you'll still be working with in three years.</p>
+    <a class="btn" href="https://booking.hoversight.agency/" target="_blank" rel="noopener noreferrer">Book a call →</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap inner">
+    <span>HOVERSIGHT / your outsourced tech department</span>
+    <span>discovery → build → support → repeat</span>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js"></script>
+<script>
+(function(){
+  gsap.registerPlugin(ScrollTrigger, SplitText);
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var rail = document.getElementById('progress-rail');
+
+  if (reduced) {
+    gsap.set('.log-item, .step, .fit-col, .tier, .terminal, .manifesto blockquote', {opacity:1, clearProps:'transform'});
+    return;
+  }
+
+  // progress rail, tied to total document scroll
+  gsap.to(rail, {
+    width: '100%',
+    ease: 'none',
+    scrollTrigger: { trigger: document.documentElement, start: 'top top', end: 'bottom bottom', scrub: true }
+  });
+
+  // HERO — plays on load, not scroll-linked
+  var h1Split = new SplitText('h1', { type: 'words,chars', wordsClass: 'word', charsClass: 'char' });
+  h1Split.chars.forEach(function(c){ c.setAttribute('aria-hidden', 'true'); });
+
+  var heroTl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+  heroTl
+    .from('.eyebrow', { opacity: 0, y: 10, duration: .5 })
+    .from(h1Split.chars, { opacity: 0, y: '110%', rotationX: -40, transformPerspective: 400, stagger: .015, duration: .6 }, '-=.2')
+    .from('.hero-sub', { opacity: 0, y: 18, duration: .6 }, '-=.5')
+    .from('.hero-actions .btn', { opacity: 0, y: 14, stagger: .1, duration: .5 }, '-=.35')
+    .from('.hero-note', { opacity: 0, duration: .5 }, '-=.2')
+    .from('.terminal', {
+      opacity: 0, rotationY: -34, x: -40, transformPerspective: 900, transformOrigin: 'left center', duration: .9
+    }, '-=.9');
+
+  // SECTION HEADINGS — word-by-word reveal as each one scrolls into view
+  document.querySelectorAll('h2').forEach(function(h){
+    var split = new SplitText(h, { type: 'words', wordsClass: 'word' });
+    split.words.forEach(function(w){ w.setAttribute('aria-hidden', 'true'); });
+    gsap.from(split.words, {
+      opacity: 0, y: '100%', rotationX: -60, transformPerspective: 500, transformOrigin: 'bottom center',
+      stagger: .04, duration: .6, ease: 'power3.out',
+      scrollTrigger: { trigger: h, start: 'top 85%', toggleActions: 'play none none reverse' }
+    });
+  });
+
+  // PROBLEM LOG — each row flips down into place, like a panel hinging open
+  gsap.utils.toArray('.log-item').forEach(function(item, i){
+    gsap.from(item, {
+      opacity: 0, rotationX: 70, y: 20, transformPerspective: 800, transformOrigin: 'top center',
+      duration: .6, ease: 'power2.out',
+      scrollTrigger: { trigger: item, start: 'top 88%', toggleActions: 'play none none reverse' }
+    });
+  });
+
+  // MANIFESTO — the blockquote tilts gently as it crosses the viewport
+  gsap.to('.manifesto blockquote', {
+    rotationY: 6, rotationX: -3, transformPerspective: 1000, ease: 'none',
+    scrollTrigger: { trigger: '.manifesto', start: 'top bottom', end: 'bottom top', scrub: 1 }
+  });
+  gsap.from('.manifesto blockquote', {
+    opacity: 0, y: 24, duration: .7, ease: 'power3.out',
+    scrollTrigger: { trigger: '.manifesto', start: 'top 80%', toggleActions: 'play none none reverse' }
+  });
+  gsap.from('.manifesto .body p', {
+    opacity: 0, y: 16, stagger: .12, duration: .6, ease: 'power3.out',
+    scrollTrigger: { trigger: '.manifesto .body', start: 'top 82%', toggleActions: 'play none none reverse' }
+  });
+
+  // METHOD STEPS — each one swings in like a page turning
+  gsap.utils.toArray('.step').forEach(function(step){
+    gsap.from(step, {
+      opacity: 0, rotationY: -55, x: -30, transformPerspective: 1000, transformOrigin: 'left center',
+      duration: .65, ease: 'power2.out',
+      scrollTrigger: { trigger: step, start: 'top 85%', toggleActions: 'play none none reverse' }
+    });
+  });
+
+  // FIT / NOT FIT — two doors swinging open from opposite sides
+  var fitCols = gsap.utils.toArray('.fit-col');
+  if (fitCols[0]) {
+    gsap.from(fitCols[0], {
+      opacity: 0, rotationY: -75, transformPerspective: 1200, transformOrigin: 'left center',
+      duration: .8, ease: 'power2.out',
+      scrollTrigger: { trigger: '.fit-grid', start: 'top 78%', toggleActions: 'play none none reverse' }
+    });
+  }
+  if (fitCols[1]) {
+    gsap.from(fitCols[1], {
+      opacity: 0, rotationY: 75, transformPerspective: 1200, transformOrigin: 'right center',
+      duration: .8, ease: 'power2.out',
+      scrollTrigger: { trigger: '.fit-grid', start: 'top 78%', toggleActions: 'play none none reverse' }
+    });
+  }
+
+  // ENGAGEMENT TIERS — flip up into place, featured tier gets extra depth
+  gsap.utils.toArray('.tier').forEach(function(tier){
+    gsap.from(tier, {
+      opacity: 0, rotationX: 50, y: 26, transformPerspective: 1000, transformOrigin: 'bottom center',
+      duration: .7, ease: 'power2.out',
+      scrollTrigger: { trigger: '.tiers', start: 'top 80%', toggleActions: 'play none none reverse' }
+    });
+  });
+  var featured = document.querySelector('.tier.featured');
+  if (featured) {
+    gsap.to(featured, {
+      rotationY: 5, ease: 'none',
+      scrollTrigger: { trigger: featured, start: 'top bottom', end: 'bottom top', scrub: 1 }
+    });
+  }
+})();
+</script>
+
+<script>
+(function(){
+  var lines = [
+    {t:'week 1', tag:'LEARNING', msg:'talking with your team, day 3', ok:false},
+    {t:'week 1', tag:'LEARNING', msg:'found a manual workaround nobody wrote down', ok:false},
+    {t:'week 2', tag:'PLANNING', msg:'plan agreed, clear goal set', ok:true},
+    {t:'week 3', tag:'BUILDING', msg:'building with your actual numbers', ok:false},
+    {t:'week 5', tag:'TESTING', msg:'checked against 42 real examples', ok:false},
+    {t:'week 6', tag:'LAUNCH', msg:'live and running, watching closely', ok:true},
+    {t:'month 14', tag:'SUPPORT', msg:'still your team, still here', ok:true}
+  ];
+  var el = document.getElementById('term');
+  var i = 0;
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function renderAll(){
+    lines.forEach(function(l){ el.appendChild(row(l)); });
+    var c = document.createElement('div');
+    c.className = 'terminal-line';
+    c.innerHTML = '<span class="t">' + lines[lines.length-1].t + '</span><span class="cursor"></span>';
+    el.appendChild(c);
+  }
+
+  function row(l){
+    var div = document.createElement('div');
+    div.className = 'terminal-line';
+    div.innerHTML =
+      '<span class="t">' + l.t + '</span>' +
+      '<span class="tag' + (l.ok ? ' ok' : '') + '">' + l.tag + '</span>' +
+      '<span class="msg">' + l.msg + '</span>';
+    return div;
+  }
+
+  if (reduced) { renderAll(); return; }
+
+  function tick(){
+    if (i >= lines.length) {
+      var c = document.createElement('div');
+      c.className = 'terminal-line';
+      c.style.animationDelay = '0s';
+      c.innerHTML = '<span class="t">' + lines[lines.length-1].t + '</span><span class="cursor"></span>';
+      el.appendChild(c);
+      return;
+    }
+    var r = row(lines[i]);
+    r.style.animationDelay = '0s';
+    el.appendChild(r);
+    i++;
+    setTimeout(tick, 550);
+  }
+  tick();
+})();
+</script>
+
+</body>
+</html>
