@@ -265,17 +265,27 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      position: sticky;
+      position: fixed;
       top: 16px;
-      z-index: 100;
-      padding: 12px 24px;
-      background: rgba(20, 15, 9, 0.72);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 9998;
+      width: min(1280px, calc(100% - 32px));
+      padding: 10px 22px;
+      background: rgba(20, 15, 9, 0.82);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
       border: 1px solid var(--line-d);
       border-radius: 100px;
-      box-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.6);
-      transition: background .4s var(--ease), border-color .4s;
+      box-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.7);
+      transition: padding .3s var(--ease), background .3s, border-color .3s, transform .3s var(--ease);
+    }
+
+    .topbar.scrolled {
+      padding: 8px 18px;
+      background: rgba(20, 15, 9, 0.92);
+      border-color: rgba(255, 165, 3, 0.25);
+      box-shadow: 0 20px 48px rgba(0, 0, 0, 0.8);
     }
 
     .brand {
@@ -285,8 +295,8 @@
     }
 
     .brand .logo {
-      width: 36px;
-      height: 37px;
+      width: 34px;
+      height: 35px;
       transition: transform .5s var(--ease)
     }
 
@@ -304,34 +314,196 @@
     }
 
     .tnav {
+      position: relative;
       display: flex;
-      gap: 6px
+      align-items: center;
+      gap: 4px;
+      background: rgba(245, 239, 226, 0.03);
+      padding: 4px;
+      border-radius: 100px;
+      border: 1px solid var(--line-d);
+    }
+
+    .nav-glider {
+      position: absolute;
+      top: 4px;
+      left: 0;
+      height: calc(100% - 8px);
+      width: 0;
+      background: rgba(255, 165, 3, 0.15);
+      border: 1px solid rgba(255, 165, 3, 0.4);
+      border-radius: 100px;
+      transition: all 0.35s var(--ease);
+      pointer-events: none;
+      z-index: 1;
     }
 
     .tnav a {
       position: relative;
+      z-index: 2;
       font-family: var(--mono);
       font-size: 11px;
       text-transform: lowercase;
-      opacity: .7;
-      padding: 8px 14px;
-      min-height: 38px;
+      opacity: .75;
+      padding: 6px 14px;
+      min-height: 32px;
       display: inline-flex;
       align-items: center;
-      border-radius: 20px;
-      transition: opacity .3s, color .3s, background .3s
+      gap: 6px;
+      border-radius: 100px;
+      transition: opacity .3s, color .3s;
     }
 
     .tnav a:hover, .tnav a.active {
       opacity: 1;
       color: var(--amber);
-      background: rgba(255, 165, 3, 0.08);
     }
 
-    @media(max-width:780px) {
-      .tnav {
-        display: none
-      }
+    .tnav a .hk {
+      font-size: 9px;
+      opacity: 0.4;
+      background: rgba(255,255,255,0.08);
+      padding: 1px 5px;
+      border-radius: 3px;
+      font-family: var(--mono);
+      transition: opacity 0.2s, background 0.2s;
+    }
+
+    .tnav a:hover .hk, .tnav a.active .hk {
+      opacity: 0.9;
+      color: var(--amber);
+      background: rgba(255, 165, 3, 0.2);
+    }
+
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .telemetry-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      color: var(--amber);
+      background: rgba(255, 165, 3, 0.08);
+      border: 1px solid rgba(255, 165, 3, 0.25);
+      padding: 5px 12px;
+      border-radius: 100px;
+      cursor: default;
+    }
+
+    .telemetry-badge .pulse-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #10B981;
+      box-shadow: 0 0 8px #10B981;
+      animation: pulseDot 1.8s infinite;
+    }
+
+    @keyframes pulseDot {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.35); opacity: 0.5; }
+    }
+
+    .mob-toggle {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 4px;
+      width: 38px;
+      height: 38px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--line-d);
+      border-radius: 50%;
+      cursor: pointer;
+      padding: 9px;
+      transition: background 0.2s, border-color 0.2s;
+    }
+
+    .mob-toggle:hover {
+      background: rgba(255, 165, 3, 0.15);
+      border-color: var(--amber);
+    }
+
+    .mob-toggle span {
+      display: block;
+      width: 16px;
+      height: 2px;
+      background: var(--paper);
+      border-radius: 2px;
+      transition: transform 0.3s, opacity 0.3s;
+    }
+
+    .mob-toggle.active span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+    .mob-toggle.active span:nth-child(2) { opacity: 0; }
+    .mob-toggle.active span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+    .mob-drawer {
+      position: fixed;
+      inset: 0;
+      z-index: 9997;
+      background: rgba(20, 15, 9, 0.96);
+      backdrop-filter: blur(24px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 40px;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.35s var(--ease), visibility 0.35s;
+    }
+
+    .mob-drawer.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .mob-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .mob-nav a {
+      font-family: var(--disp);
+      font-size: clamp(32px, 7vw, 48px);
+      font-weight: 800;
+      color: var(--paper);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      transition: color 0.2s;
+    }
+
+    .mob-nav a:hover {
+      color: var(--amber);
+    }
+
+    .mob-nav a .hk {
+      font-family: var(--mono);
+      font-size: 14px;
+      color: var(--amber);
+    }
+
+    .mob-drawer-foot {
+      margin-top: 40px;
+      padding-top: 24px;
+      border-top: 1px solid var(--line-d);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    @media(max-width:880px) {
+      .tnav { display: none; }
+      .telemetry-badge { display: none; }
+      .mob-toggle { display: flex; }
     }
 
     /* ============ SCROLL-BLEED HERO ============ */
@@ -1775,16 +1947,51 @@
     <span id="hudPct">00%</span>
   </div>
 
+  <!-- ============ GLOBAL FLOATING COMMAND NAV ============ -->
+  <header class="topbar" id="topbar">
+    <div class="brand"><span class="logo lg"></span><span class="wm">Hoversight</span></div>
+    <nav class="tnav" id="tnav">
+      <div class="nav-glider" id="navGlider"></div>
+      <a href="#vision" data-sec="vision"><span class="hk">1</span>vision</a>
+      <a href="#services" data-sec="services"><span class="hk">2</span>services</a>
+      <a href="#method" data-sec="method"><span class="hk">3</span>method</a>
+      <a href="#proof" data-sec="proof"><span class="hk">4</span>proof</a>
+      <a href="#faq" data-sec="faq"><span class="hk">5</span>faq</a>
+      <a href="#contact" data-sec="contact"><span class="hk">6</span>contact</a>
+    </nav>
+    <div class="topbar-actions">
+      <div class="telemetry-badge" title="14 Customer Systems Monitored & Live 24/7">
+        <span class="pulse-dot"></span>
+        <span class="badge-txt">14 ONLINE</span>
+      </div>
+      <a class="cta" href="https://booking.hoversight.agency/">Book a call</a>
+      <button class="mob-toggle" id="mobToggle" aria-label="Toggle Navigation Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ============ TACTICAL MOBILE DRAWER ============ -->
+  <div class="mob-drawer" id="mobDrawer">
+    <div class="mob-drawer-inner">
+      <nav class="mob-nav">
+        <a href="#vision"><span class="hk">1</span>vision</a>
+        <a href="#services"><span class="hk">2</span>services</a>
+        <a href="#method"><span class="hk">3</span>method</a>
+        <a href="#proof"><span class="hk">4</span>proof</a>
+        <a href="#faq"><span class="hk">5</span>faq</a>
+        <a href="#contact"><span class="hk">6</span>contact</a>
+      </nav>
+      <div class="mob-drawer-foot">
+        <div class="telemetry-badge"><span class="pulse-dot"></span><span>14/14 SYSTEMS ONLINE</span></div>
+        <a class="cta" href="https://booking.hoversight.agency/">Book a call</a>
+      </div>
+    </div>
+  </div>
+
   <!-- ============ SCROLL-BLEED HERO ============ -->
   <div class="scrollhero" id="scrollhero">
     <div class="stage" id="stage">
-      <div class="topbar">
-        <div class="brand"><span class="logo lg"></span><span class="wm">Hoversight</span></div>
-        <nav class="tnav"><a href="#vision">vision</a><a href="#services">services</a><a href="#method">method</a><a href="#proof">proof</a><a href="#faq">faq</a><a
-            href="#contact">contact</a></nav>
-        <a class="cta" href="https://booking.hoversight.agency/">Book a call</a>
-      </div>
-
       <div class="bleed" aria-hidden="true"></div>
       <span class="heart" aria-hidden="true"><svg viewBox="0 0 24 24">
           <path fill="#fff"
@@ -2384,6 +2591,48 @@
       })
     }
 
+    /* Navigation Glider, Scroll-Spy, Mobile Menu & Keyboard Shortcuts */
+    const tnav = document.getElementById('tnav');
+    const navGlider = document.getElementById('navGlider');
+    const navLinks = document.querySelectorAll('.tnav a');
+    const mobDrawer = document.getElementById('mobDrawer');
+    const mobToggle = document.getElementById('mobToggle');
+    const topbar = document.getElementById('topbar');
+
+    function updateNavGlider(activeEl) {
+      if (!navGlider || !activeEl || !tnav) return;
+      const navRect = tnav.getBoundingClientRect();
+      const elRect = activeEl.getBoundingClientRect();
+      navGlider.style.left = (elRect.left - navRect.left) + 'px';
+      navGlider.style.width = elRect.width + 'px';
+    }
+
+    if (navLinks.length > 0) {
+      setTimeout(() => updateNavGlider(navLinks[0]), 250);
+    }
+
+    if (mobToggle && mobDrawer) {
+      mobToggle.addEventListener('click', () => {
+        const isActive = mobDrawer.classList.toggle('active');
+        mobToggle.classList.toggle('active', isActive);
+      });
+      document.querySelectorAll('.mob-nav a').forEach(a => {
+        a.addEventListener('click', () => {
+          mobDrawer.classList.remove('active');
+          mobToggle.classList.remove('active');
+        });
+      });
+    }
+
+    addEventListener('keydown', e => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      const secMap = { '1': 'vision', '2': 'services', '3': 'method', '4': 'proof', '5': 'faq', '6': 'contact' };
+      if (secMap[e.key]) {
+        const targetEl = document.getElementById(secMap[e.key]);
+        if (targetEl) targetEl.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+
     /* ===== global scroll driver ===== */
     const hero = document.getElementById('scrollhero'), stage = document.getElementById('stage'), sbar = document.getElementById('sbar'), track = document.getElementById('track');
     const regionH = [...document.querySelectorAll('.region-head h2')];
@@ -2398,6 +2647,11 @@
     function frame() {
       const y = scrollY, vh = innerHeight, doc = document.documentElement.scrollHeight - vh;
       sbar.style.width = (y / (doc || 1) * 100) + '%';
+
+      if (topbar) {
+        topbar.classList.toggle('scrolled', y > 60);
+      }
+
       if (!rm) {
         const max = hero.offsetHeight - vh;
         const p = Math.min(1, Math.max(0, (-hero.getBoundingClientRect().top) / (max || 1)));
@@ -2428,23 +2682,28 @@
           thrusterGlow.style.setProperty('--gy', cy + 'px');
         }
 
-        // Tactical Altitude HUD Update
+        // Tactical Altitude HUD Update & Glider ScrollSpy
+        const sectionList = ['vision', 'services', 'method', 'proof', 'console', 'faq', 'contact'];
+        let activeSec = 'HERO';
+        for (const sId of sectionList) {
+          const el = document.getElementById(sId);
+          if (el) {
+            const r = el.getBoundingClientRect();
+            if (r.top <= vh * 0.45 && r.bottom >= vh * 0.15) {
+              activeSec = sId.toUpperCase();
+              navLinks.forEach(a => {
+                const isMatch = a.dataset.sec === sId;
+                a.classList.toggle('active', isMatch);
+                if (isMatch) updateNavGlider(a);
+              });
+              break;
+            }
+          }
+        }
+
         if (hudPct && hudCode) {
           const pctVal = Math.min(100, Math.max(0, Math.floor((y / (doc || 1)) * 100)));
           hudPct.textContent = String(pctVal).padStart(2, '0') + '%';
-          
-          const sectionList = ['vision', 'services', 'method', 'proof', 'console', 'faq', 'contact'];
-          let activeSec = 'HERO';
-          for (const sId of sectionList) {
-            const el = document.getElementById(sId);
-            if (el) {
-              const r = el.getBoundingClientRect();
-              if (r.top <= vh * 0.45 && r.bottom >= vh * 0.15) {
-                activeSec = sId.toUpperCase();
-                break;
-              }
-            }
-          }
           hudCode.textContent = `ALT // ${activeSec}`;
         }
 
@@ -2469,7 +2728,11 @@
       ticking = false;
     }
     addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(frame) } }, { passive: true });
-    addEventListener('resize', frame);
+    addEventListener('resize', () => {
+      frame();
+      const activeNav = document.querySelector('.tnav a.active') || navLinks[0];
+      if (activeNav) updateNavGlider(activeNav);
+    });
 
     /* count-up */
     function countUp(el) {
