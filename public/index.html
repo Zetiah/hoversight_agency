@@ -343,7 +343,7 @@
       z-index: 2;
       font-family: var(--mono);
       font-size: 11px;
-      text-transform: lowercase;
+      text-transform: none;
       opacity: .75;
       padding: 6px 14px;
       min-height: 32px;
@@ -1903,7 +1903,212 @@
       0% { top: 0; opacity: 0.8; }
       100% { top: 100%; opacity: 0; }
     }
-  </style>
+
+    /* ===== Live Surveillance Deck Showcase ===== */
+    .surveillance-deck {
+      margin-top: 40px;
+      background: var(--ink-2);
+      border: 1px solid var(--line-d);
+      border-radius: 12px;
+      padding: 28px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 24px 48px rgba(0, 0, 0, 0.5);
+    }
+
+    .deck-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--line-d);
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .deck-live-tag {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      color: var(--amber);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .live-pulse {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #10B981;
+      box-shadow: 0 0 10px #10B981;
+      animation: pulseGlow 1.6s infinite alternate;
+    }
+
+    .deck-controls {
+      display: flex;
+      gap: 8px;
+    }
+
+    .deck-btn {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--line-d);
+      color: var(--paper);
+      padding: 6px 14px;
+      border-radius: 100px;
+      cursor: pointer;
+      transition: all 0.25s;
+    }
+
+    .deck-btn:hover {
+      background: var(--amber);
+      color: var(--ink);
+      border-color: var(--amber);
+    }
+
+    .deck-body {
+      display: grid;
+      grid-template-columns: 1.35fr 1fr;
+      gap: 32px;
+      align-items: center;
+    }
+
+    @media(max-width: 900px) {
+      .deck-body {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .deck-stage {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid var(--line-d);
+      border-radius: 10px;
+      padding: 20px;
+      position: relative;
+      min-height: 280px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .deck-screen-frame {
+      width: 100%;
+      height: 100%;
+      transition: transform 0.4s var(--ease), opacity 0.3s;
+    }
+
+    .deck-info {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .deck-badge {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      color: var(--amber);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+    }
+
+    .deck-title {
+      font-family: var(--disp);
+      font-size: clamp(30px, 3.5vw, 42px);
+      font-weight: 800;
+      line-height: 1;
+      margin-bottom: 6px;
+      color: var(--paper);
+    }
+
+    .deck-type {
+      font-family: var(--mono);
+      font-size: 12px;
+      opacity: 0.75;
+      margin-bottom: 14px;
+    }
+
+    .deck-desc {
+      font-size: 14.5px;
+      line-height: 1.6;
+      color: var(--muted-d);
+      margin-bottom: 20px;
+    }
+
+    .deck-meta-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      background: rgba(245, 239, 226, 0.04);
+      padding: 14px;
+      border-radius: 8px;
+      border: 1px solid var(--line-d);
+      margin-bottom: 20px;
+    }
+
+    .deck-meta-grid .meta-lbl {
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: 0.14em;
+      opacity: 0.6;
+      margin-bottom: 4px;
+    }
+
+    .deck-meta-grid .meta-val {
+      font-family: var(--mono);
+      font-size: 12.5px;
+      color: var(--amber);
+      font-weight: 600;
+    }
+
+    .deck-progress-bar {
+      height: 3px;
+      background: rgba(255, 255, 255, 0.1);
+      width: 100%;
+      margin: 20px 0 16px;
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: var(--amber);
+      transition: width 0.1s linear;
+    }
+
+    .deck-thumbnails {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      scroll-behavior: smooth;
+    }
+
+    .deck-thumb {
+      font-family: var(--mono);
+      font-size: 10px;
+      padding: 6px 12px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--line-d);
+      color: var(--muted-d);
+      white-space: nowrap;
+      cursor: pointer;
+      transition: all 0.25s;
+      flex-shrink: 0;
+    }
+
+    .deck-thumb:hover, .deck-thumb.active {
+      background: rgba(255, 165, 3, 0.15);
+      border-color: var(--amber);
+      color: var(--amber);
+    }
 </head>
 
 <body>
@@ -1952,12 +2157,12 @@
     <div class="brand"><span class="logo lg"></span><span class="wm">Hoversight</span></div>
     <nav class="tnav" id="tnav">
       <div class="nav-glider" id="navGlider"></div>
-      <a href="#vision" data-sec="vision"><span class="hk">1</span>vision</a>
-      <a href="#services" data-sec="services"><span class="hk">2</span>services</a>
-      <a href="#method" data-sec="method"><span class="hk">3</span>method</a>
-      <a href="#proof" data-sec="proof"><span class="hk">4</span>proof</a>
-      <a href="#faq" data-sec="faq"><span class="hk">5</span>faq</a>
-      <a href="#contact" data-sec="contact"><span class="hk">6</span>contact</a>
+      <a href="#vision" data-sec="vision"><span class="hk">1</span>Vision</a>
+      <a href="#services" data-sec="services"><span class="hk">2</span>Services</a>
+      <a href="#method" data-sec="method"><span class="hk">3</span>Method</a>
+      <a href="#proof" data-sec="proof"><span class="hk">4</span>Proof</a>
+      <a href="#faq" data-sec="faq"><span class="hk">5</span>FAQ</a>
+      <a href="#contact" data-sec="contact"><span class="hk">6</span>Contact</a>
     </nav>
     <div class="topbar-actions">
       <div class="telemetry-badge" title="14 Customer Systems Monitored & Live 24/7">
@@ -1975,12 +2180,12 @@
   <div class="mob-drawer" id="mobDrawer">
     <div class="mob-drawer-inner">
       <nav class="mob-nav">
-        <a href="#vision"><span class="hk">1</span>vision</a>
-        <a href="#services"><span class="hk">2</span>services</a>
-        <a href="#method"><span class="hk">3</span>method</a>
-        <a href="#proof"><span class="hk">4</span>proof</a>
-        <a href="#faq"><span class="hk">5</span>faq</a>
-        <a href="#contact"><span class="hk">6</span>contact</a>
+        <a href="#vision"><span class="hk">1</span>Vision</a>
+        <a href="#services"><span class="hk">2</span>Services</a>
+        <a href="#method"><span class="hk">3</span>Method</a>
+        <a href="#proof"><span class="hk">4</span>Proof</a>
+        <a href="#faq"><span class="hk">5</span>FAQ</a>
+        <a href="#contact"><span class="hk">6</span>Contact</a>
       </nav>
       <div class="mob-drawer-foot">
         <div class="telemetry-badge"><span class="pulse-dot"></span><span>14/14 SYSTEMS ONLINE</span></div>
@@ -2145,6 +2350,55 @@
       <button class="filter-btn" data-filter="canada">Canada (04)</button>
       <button class="filter-btn" data-filter="dashboard">Dashboards</button>
       <button class="filter-btn" data-filter="crm">CRM & Pipeline</button>
+    </div>
+
+    <!-- ============ LIVE SURVEILLANCE SHOWCASE REEL ============ -->
+    <div class="surveillance-deck rv" id="surveillanceDeck">
+      <div class="deck-header">
+        <div class="deck-live-tag">
+          <span class="live-pulse"></span>
+          <span id="deckCounter">SYSTEM 01 OF 14</span> · LIVE SURVEILLANCE FEED
+        </div>
+        <div class="deck-controls">
+          <button class="deck-btn" id="deckPrev" aria-label="Previous System">&larr; PREV</button>
+          <button class="deck-btn play-btn" id="deckPause" aria-label="Pause Auto-Play">PAUSE</button>
+          <button class="deck-btn" id="deckNext" aria-label="Next System">NEXT &rarr;</button>
+        </div>
+      </div>
+
+      <div class="deck-body">
+        <div class="deck-stage">
+          <div class="card-crosshair tl"></div><div class="card-crosshair tr"></div><div class="card-crosshair bl"></div><div class="card-crosshair br"></div>
+          <div class="laser-scanline"></div>
+          <div class="deck-screen-frame" id="deckScreenFrame">
+            <!-- Dynamic preview svg -->
+          </div>
+        </div>
+
+        <div class="deck-info">
+          <div class="deck-badge" id="deckRegion">Bacolod · PH</div>
+          <h3 class="deck-title" id="deckTitle">Coyo's Bakery OS</h3>
+          <div class="deck-type" id="deckType">Operations Dashboard OS</div>
+          <p class="deck-desc" id="deckDesc">All-in-one bakery operations: production, inventory across outlets, automated orders, real-time insight.</p>
+
+          <div class="deck-meta-grid">
+            <div>
+              <div class="meta-lbl">CONTINUITY</div>
+              <div class="meta-val">Guarded Since <span id="deckYr">'26</span></div>
+            </div>
+            <div>
+              <div class="meta-lbl">OWNERSHIP</div>
+              <div class="meta-val">100% Maintained</div>
+            </div>
+          </div>
+
+          <a class="cta deck-cta" id="deckDiscussCta" href="https://booking.hoversight.agency/" target="_blank">Discuss Similar System <span class="sk"></span></a>
+        </div>
+      </div>
+
+      <div class="deck-progress-bar"><div class="progress-fill" id="deckProgressFill"></div></div>
+
+      <div class="deck-thumbnails" id="deckThumbnails"></div>
     </div>
   </section>
 
@@ -2369,7 +2623,128 @@
     const mqText = " · Discovery · Build · Support · Repeat · Fourteen systems live · Negros · Iloilo · Canada";
     mq.textContent = mqText; mq2.textContent = mqText;
 
-    /* 3D Card Tilt & Interactive Modal */
+    /* ===== LIVE SURVEILLANCE SHOWCASE REEL CONTROLLER ===== */
+    const ALL_PROJECTS = [];
+    const regionNames = { negros: 'Negros Island · PH', iloilo: 'Iloilo · Western Visayas', canada: 'Canada · Global Remote' };
+    const typeNames = { dashboard: 'Operations Dashboard OS', crm: 'CRM & Lifecycle Management', cards: 'Catalog & Brokerage Platform', calendar: 'Smart Cashflow Calendar', editorial: 'Digital Editorial Platform', phone: 'Mobile QR & Executive OS' };
+
+    for (const rg of ['negros', 'iloilo', 'canada']) {
+      DATA[rg].forEach(p => {
+        ALL_PROJECTS.push({
+          name: p[0],
+          tag: p[1],
+          yr: p[2],
+          desc: p[3],
+          tpl: p[4],
+          label: p[5],
+          extra: p[6] || false,
+          region: rg
+        });
+      });
+    }
+
+    let deckIdx = 0;
+    let deckIsPlaying = true;
+    let deckTimer = null;
+    let deckProgressTimer = null;
+    let progressPct = 0;
+
+    const deckTitle = document.getElementById('deckTitle');
+    const deckRegion = document.getElementById('deckRegion');
+    const deckType = document.getElementById('deckType');
+    const deckDesc = document.getElementById('deckDesc');
+    const deckYr = document.getElementById('deckYr');
+    const deckCounter = document.getElementById('deckCounter');
+    const deckScreenFrame = document.getElementById('deckScreenFrame');
+    const deckProgressFill = document.getElementById('deckProgressFill');
+    const deckThumbnails = document.getElementById('deckThumbnails');
+    const deckPrev = document.getElementById('deckPrev');
+    const deckNext = document.getElementById('deckNext');
+    const deckPause = document.getElementById('deckPause');
+
+    // Build Thumbnail Strip
+    if (deckThumbnails && ALL_PROJECTS.length > 0) {
+      deckThumbnails.innerHTML = ALL_PROJECTS.map((p, i) =>
+        `<div class="deck-thumb ${i === 0 ? 'active' : ''}" data-idx="${i}">${String(i + 1).padStart(2, '0')}. ${p.name}</div>`
+      ).join('');
+
+      document.querySelectorAll('.deck-thumb').forEach(t => {
+        t.addEventListener('click', () => {
+          deckIdx = parseInt(t.dataset.idx, 10);
+          showDeckProject(deckIdx);
+          resetDeckTimer();
+        });
+      });
+    }
+
+    function showDeckProject(idx) {
+      if (idx < 0) idx = ALL_PROJECTS.length - 1;
+      if (idx >= ALL_PROJECTS.length) idx = 0;
+      deckIdx = idx;
+
+      const p = ALL_PROJECTS[deckIdx];
+      if (!p) return;
+
+      if (deckTitle) deckTitle.textContent = p.name;
+      if (deckRegion) deckRegion.textContent = regionNames[p.region] || p.region;
+      if (deckType) deckType.textContent = typeNames[p.tpl] || p.tag;
+      if (deckDesc) deckDesc.textContent = p.desc;
+      if (deckYr) deckYr.textContent = p.yr;
+      if (deckCounter) deckCounter.textContent = `SYSTEM ${String(deckIdx + 1).padStart(2, '0')} OF ${String(ALL_PROJECTS.length).padStart(2, '0')}`;
+
+      if (deckScreenFrame) {
+        deckScreenFrame.style.opacity = '0';
+        deckScreenFrame.style.transform = 'scale(0.95)';
+        setTimeout(() => {
+          deckScreenFrame.innerHTML = screen(p.tpl, p.label, p.extra);
+          deckScreenFrame.style.opacity = '1';
+          deckScreenFrame.style.transform = 'scale(1)';
+        }, 150);
+      }
+
+      document.querySelectorAll('.deck-thumb').forEach((t, i) => {
+        const isActive = i === deckIdx;
+        t.classList.toggle('active', isActive);
+        if (isActive) t.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      });
+
+      progressPct = 0;
+      if (deckProgressFill) deckProgressFill.style.width = '0%';
+    }
+
+    function resetDeckTimer() {
+      clearInterval(deckTimer);
+      clearInterval(deckProgressTimer);
+      progressPct = 0;
+
+      if (deckIsPlaying) {
+        deckProgressTimer = setInterval(() => {
+          progressPct += 2.5;
+          if (deckProgressFill) deckProgressFill.style.width = progressPct + '%';
+        }, 100);
+
+        deckTimer = setInterval(() => {
+          deckIdx = (deckIdx + 1) % ALL_PROJECTS.length;
+          showDeckProject(deckIdx);
+        }, 4000);
+      }
+    }
+
+    if (deckPrev) deckPrev.addEventListener('click', () => { showDeckProject(deckIdx - 1); resetDeckTimer(); });
+    if (deckNext) deckNext.addEventListener('click', () => { showDeckProject(deckIdx + 1); resetDeckTimer(); });
+    if (deckPause) {
+      deckPause.addEventListener('click', () => {
+        deckIsPlaying = !deckIsPlaying;
+        deckPause.textContent = deckIsPlaying ? 'PAUSE' : 'PLAY';
+        resetDeckTimer();
+      });
+    }
+
+    // Initialize first project
+    if (ALL_PROJECTS.length > 0) {
+      showDeckProject(0);
+      resetDeckTimer();
+    }
     function bindCardEvents() {
       document.querySelectorAll('.card').forEach(card => {
         card.addEventListener('mousemove', e => {
