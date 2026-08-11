@@ -103,16 +103,10 @@
 
     /* preloader */
     #pre {
-      position: fixed;
-      inset: 0;
-      z-index: 9998;
-      background: var(--ink);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 24px;
-      transition: opacity .8s var(--ease), visibility .8s
+      display: none !important;
+      opacity: 0 !important;
+      visibility: hidden !important;
+      pointer-events: none !important;
     }
 
     #pre.done {
@@ -1262,14 +1256,14 @@
     }
 
     .rv {
-      opacity: 0;
-      transform: translateY(30px);
-      transition: opacity .85s var(--ease), transform .85s var(--ease)
+      opacity: 1;
+      transform: none;
+      transition: opacity .85s var(--ease), transform .85s var(--ease);
     }
 
     .rv.in {
       opacity: 1;
-      transform: none
+      transform: none;
     }
 
     .rv.d1 {
@@ -2539,6 +2533,10 @@
   </div>
 
   <script>
+    document.body.classList.add('ready');
+    const preEl = document.getElementById('pre');
+    if (preEl) preEl.classList.add('done');
+
     const rm = matchMedia('(prefers-reduced-motion:reduce)').matches;
     if (rm) document.documentElement.classList.add('rmstatic');
     const sparkSVG = document.getElementById('sparkTpl').innerHTML;
