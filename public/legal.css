@@ -1,0 +1,168 @@
+/* Shared styles for Hoversight legal pages (privacy, terms, cookies) */
+:root {
+  --ink: #140F09;
+  --paper: #F5EFE2;
+  --muted: rgba(245, 239, 226, .72);
+  --faint: rgba(245, 239, 226, .5);
+  --line: rgba(245, 239, 226, .14);
+  --amber: #FFA503;
+  --ember: #C47814;
+  --disp: "Darker Grotesque", sans-serif;
+  --body: "Hanken Grotesk", sans-serif;
+  --mono: "Martian Mono", monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--body);
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.legal-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px clamp(20px, 5vw, 64px);
+  background: rgba(20, 15, 9, .82);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
+}
+
+.legal-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--mono);
+  font-size: 13px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--paper);
+  text-decoration: none;
+}
+
+.legal-brand svg { width: 26px; height: 26px; display: block; }
+
+.legal-back {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: .08em;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color .2s;
+}
+.legal-back:hover { color: var(--amber); }
+
+.legal-wrap {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: clamp(48px, 8vw, 96px) clamp(20px, 5vw, 40px) 40px;
+}
+
+.legal-kicker {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: .24em;
+  text-transform: uppercase;
+  color: var(--amber);
+  margin-bottom: 18px;
+}
+
+.legal-wrap h1 {
+  font-family: var(--disp);
+  font-weight: 700;
+  letter-spacing: -.02em;
+  line-height: 1;
+  font-size: clamp(40px, 7vw, 68px);
+  margin-bottom: 16px;
+}
+
+.legal-meta {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: .04em;
+  color: var(--faint);
+  margin-bottom: 40px;
+  padding-bottom: 28px;
+  border-bottom: 1px solid var(--line);
+}
+
+.legal-wrap h2 {
+  font-family: var(--disp);
+  font-weight: 600;
+  font-size: clamp(24px, 3vw, 32px);
+  letter-spacing: -.01em;
+  margin: 44px 0 14px;
+}
+
+.legal-wrap h3 {
+  font-family: var(--body);
+  font-weight: 600;
+  font-size: 17px;
+  margin: 26px 0 8px;
+}
+
+.legal-wrap p,
+.legal-wrap li {
+  color: var(--muted);
+  font-size: 16px;
+  margin-bottom: 14px;
+}
+
+.legal-wrap ul,
+.legal-wrap ol {
+  padding-left: 22px;
+  margin-bottom: 14px;
+}
+
+.legal-wrap li { margin-bottom: 8px; }
+
+.legal-wrap a {
+  color: var(--amber);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(255, 165, 3, .35);
+}
+.legal-wrap a:hover { border-bottom-color: var(--amber); }
+
+.legal-wrap strong { color: var(--paper); font-weight: 600; }
+
+.legal-note {
+  margin: 8px 0 40px;
+  padding: 16px 18px;
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--amber);
+  border-radius: 8px;
+  background: rgba(255, 165, 3, .04);
+  font-size: 14.5px;
+  color: var(--muted);
+}
+
+.legal-footer {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 32px clamp(20px, 5vw, 40px) 64px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 22px;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: .06em;
+  color: var(--faint);
+}
+
+.legal-footer nav { display: flex; flex-wrap: wrap; gap: 20px; }
+.legal-footer a { color: var(--muted); text-decoration: none; transition: color .2s; }
+.legal-footer a:hover { color: var(--amber); }
