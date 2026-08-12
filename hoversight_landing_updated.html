@@ -581,8 +581,8 @@
       height: 128%;
       display: flex;
       gap: 16px;
-      transform: skewY(-8deg) rotate(-3deg) scale(1.04);
-      transform-origin: top right;
+      transform: skewY(8deg) rotate(3deg) scale(1.04);
+      transform-origin: top left;
       opacity: calc((1 - var(--p, 0)) * 0.5);
       pointer-events: none;
       -webkit-mask-image: linear-gradient(100deg, transparent 4%, rgba(0, 0, 0, .35) 26%, #000 58%);
@@ -927,24 +927,44 @@
     .phases {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-      gap: 1px;
-      background: var(--line-l);
-      border: 1px solid var(--line-l);
-      border-radius: 14px;
-      overflow: hidden
+      gap: 16px;
     }
 
     .phase {
+      position: relative;
       background: var(--paper);
+      border: 1px solid var(--line-l);
+      border-radius: 14px;
       padding: clamp(24px, 2.2vw, 34px);
       display: flex;
       flex-direction: column;
       gap: 14px;
-      transition: background .4s, transform .5s var(--ease)
+      transition: background .4s, transform .5s var(--ease), border-color .4s, box-shadow .4s
     }
 
     .phase:hover {
-      background: var(--paper-2)
+      background: var(--paper-2);
+      border-color: rgba(196, 120, 20, .38);
+      box-shadow: 0 10px 30px rgba(20, 15, 9, .06)
+    }
+
+    /* On wide screens the five stages sit in one connected row (a clear cycle),
+       with forward-flow arrows linking them; narrower screens wrap and drop arrows. */
+    @media (min-width: 1080px) {
+      .phases { grid-template-columns: repeat(5, 1fr); }
+      .phase:not(:last-child)::after {
+        content: '';
+        position: absolute;
+        top: 40px;
+        right: -12px;
+        width: 13px;
+        height: 13px;
+        transform: translateY(-50%) rotate(45deg);
+        border-top: 2px solid var(--ember);
+        border-right: 2px solid var(--ember);
+        opacity: .55;
+        z-index: 3
+      }
     }
 
     .phase .pnum {
@@ -967,6 +987,74 @@
       font-size: 14.5px;
       line-height: 1.55;
       color: var(--muted-l)
+    }
+
+    /* ===== LIFECYCLE FRAMING (Method section) ===== */
+    .cycle-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--ember);
+    }
+
+    .cycle-ring {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 1.5px dashed var(--ember);
+      border-top-color: transparent;
+      animation: cycleSpin 3.4s linear infinite;
+    }
+
+    @keyframes cycleSpin { to { transform: rotate(360deg); } }
+
+    .lifecycle-loop {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      margin-top: 4px;
+    }
+
+    .lifecycle-loop .ll-arc {
+      flex: 1;
+      height: 1px;
+      background: repeating-linear-gradient(90deg, rgba(196, 120, 20, .5) 0 6px, transparent 6px 12px);
+    }
+
+    .lifecycle-loop .ll-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--ink);
+      white-space: nowrap;
+      padding: 9px 18px;
+      border: 1px solid var(--line-l);
+      border-radius: 999px;
+      background: var(--paper);
+    }
+
+    .lifecycle-loop .ll-spin {
+      color: var(--ember);
+      font-size: 15px;
+      line-height: 1;
+      display: inline-block;
+      animation: cycleSpin 3.4s linear infinite;
+    }
+
+    .rmstatic .cycle-ring,
+    .rmstatic .ll-spin { animation: none; }
+
+    @media (max-width: 640px) {
+      .lifecycle-loop .ll-arc { display: none; }
+      .lifecycle-loop { justify-content: center; }
     }
 
     .chips {
@@ -2158,28 +2246,57 @@
       display: flex;
       gap: 8px;
       overflow-x: auto;
-      padding-bottom: 8px;
+      padding: 2px 0 12px;
       scroll-behavior: smooth;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255, 165, 3, 0.45) rgba(255, 255, 255, 0.05);
+      -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 2.5%, #000 97.5%, transparent 100%);
+      mask-image: linear-gradient(90deg, transparent 0, #000 2.5%, #000 97.5%, transparent 100%);
+    }
+
+    .deck-thumbnails::-webkit-scrollbar {
+      height: 6px;
+    }
+
+    .deck-thumbnails::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 3px;
+    }
+
+    .deck-thumbnails::-webkit-scrollbar-thumb {
+      background: rgba(255, 165, 3, 0.4);
+      border-radius: 3px;
+    }
+
+    .deck-thumbnails::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 165, 3, 0.65);
     }
 
     .deck-thumb {
       font-family: var(--mono);
       font-size: 12px;
-      padding: 6px 12px;
-      border-radius: 6px;
-      background: rgba(255, 255, 255, 0.04);
+      padding: 8px 13px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.03);
       border: 1px solid var(--line-d);
       color: var(--muted-d);
       white-space: nowrap;
       cursor: pointer;
-      transition: all 0.25s;
+      transition: background .25s, border-color .25s, color .25s, box-shadow .25s;
       flex-shrink: 0;
     }
 
-    .deck-thumb:hover, .deck-thumb.active {
+    .deck-thumb:hover {
+      background: rgba(255, 165, 3, 0.08);
+      border-color: rgba(255, 165, 3, 0.45);
+      color: var(--paper);
+    }
+
+    .deck-thumb.active {
       background: rgba(255, 165, 3, 0.15);
       border-color: var(--amber);
       color: var(--amber);
+      box-shadow: 0 0 0 1px rgba(255, 165, 3, 0.25), 0 6px 18px rgba(255, 165, 3, 0.12);
     }
 
     /* ============ LEAD CAPTURE FORM ============ */
@@ -2459,7 +2576,7 @@
   <section class="pale method" id="method">
     <div class="method-head rv">
       <h2>Five steps. Then we start the <em>next five.</em></h2>
-      <div class="eyebrow" style="opacity:.6"><span class="sk"></span>How we work</div>
+      <div class="cycle-badge rv"><span class="cycle-ring" aria-hidden="true"></span>Continuous cycle</div>
     </div>
     <div class="phases">
       <div class="phase rv"><span class="pnum">01</span>
@@ -2487,6 +2604,11 @@
         <p>We keep it working, support it, and build whatever comes next.</p>
         <div class="chips"><span>Support</span><span>Repeat →</span></div>
       </div>
+    </div>
+    <div class="lifecycle-loop rv">
+      <span class="ll-arc"></span>
+      <span class="ll-badge"><span class="ll-spin">↻</span> then we start the next five</span>
+      <span class="ll-arc"></span>
     </div>
   </section>
 
