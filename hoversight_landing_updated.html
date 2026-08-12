@@ -20,7 +20,7 @@
       --ink-2: #211913;
       --paper: #F5EFE2;
       --paper-2: #E9E0CE;
-      --muted-d: rgba(245, 239, 226, .62);
+      --muted-d: rgba(245, 239, 226, .72);
       --muted-l: #6A5F52;
       --line-d: rgba(245, 239, 226, .14);
       --line-l: rgba(20, 15, 9, .13);
@@ -626,6 +626,21 @@
     .line-dark .dim {
       -webkit-text-stroke: 1.4px var(--paper);
       color: transparent
+    }
+
+    /* Fallback: if -webkit-text-stroke isn't supported, keep the word visible
+       instead of transparent (prevents an invisible headline segment). */
+    @supports not ((-webkit-text-stroke: 1px) or (text-stroke: 1px)) {
+      .line-dark .dim {
+        color: var(--paper);
+      }
+    }
+
+    /* Reduced motion / preview safety: render the ghosted word as a solid,
+       legible fill rather than relying on the stroke effect. */
+    .rmstatic .line-dark .dim {
+      -webkit-text-stroke: 0 !important;
+      color: var(--paper) !important;
     }
 
     .line-amber {
@@ -2087,7 +2102,7 @@
 
     .deck-thumb {
       font-family: var(--mono);
-      font-size: 10px;
+      font-size: 12px;
       padding: 6px 12px;
       border-radius: 6px;
       background: rgba(255, 255, 255, 0.04);
@@ -2103,6 +2118,98 @@
       background: rgba(255, 165, 3, 0.15);
       border-color: var(--amber);
       color: var(--amber);
+    }
+
+    /* ============ LEAD CAPTURE FORM ============ */
+    .lead-intro {
+      max-width: 560px;
+      margin-top: 18px;
+      font-size: clamp(15px, 1.2vw, 17px);
+      line-height: 1.6;
+      color: var(--muted-d);
+    }
+    .lead-form {
+      margin: 40px 0 52px;
+      max-width: 680px;
+    }
+    .lead-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+    .lead-field {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 18px;
+    }
+    .lead-field label {
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted-d);
+      margin-bottom: 8px;
+    }
+    .lead-field input,
+    .lead-field textarea {
+      font-family: var(--body);
+      font-size: 16px;
+      color: var(--paper);
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--line-d);
+      border-radius: 10px;
+      padding: 13px 15px;
+      width: 100%;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .lead-field textarea {
+      resize: vertical;
+      min-height: 108px;
+      line-height: 1.55;
+    }
+    .lead-field input::placeholder,
+    .lead-field textarea::placeholder {
+      color: rgba(245, 239, 226, 0.4);
+    }
+    .lead-field input:focus,
+    .lead-field textarea:focus {
+      outline: none;
+      border-color: var(--amber);
+      background: rgba(255, 165, 3, 0.06);
+    }
+    .lead-field input:user-invalid,
+    .lead-field textarea:user-invalid {
+      border-color: #e2603f;
+    }
+    .lead-hp {
+      position: absolute;
+      left: -9999px;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+    }
+    .lead-actions {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      flex-wrap: wrap;
+      margin-top: 4px;
+    }
+    .lead-note {
+      font-size: 13px;
+      color: var(--muted-d);
+    }
+    .lead-note b { color: var(--paper); font-weight: 600; }
+    .lead-status {
+      margin-top: 16px;
+      font-family: var(--mono);
+      font-size: 13px;
+      letter-spacing: 0.03em;
+      color: var(--amber);
+    }
+    .lead-status.err { color: #e2603f; }
+    @media (max-width: 640px) {
+      .lead-row { grid-template-columns: 1fr; gap: 0; }
     }
   </style>
 </head>
@@ -2205,7 +2312,7 @@
         <div style="position:relative">
           <h1 class="line line-dark"><span class="ln"><i>We don't <b>build&nbsp;it</b></i></span><span
               class="ln"><i><span class="dim">and disappear.</span></i></span></h1>
-          <h1 class="line line-amber">We move in & hover.</h1>
+          <div class="line line-amber">We move in & hover.</div>
         </div>
         <p class="hero-sub">The persistent engineering presence your business needs — developers who see how you work, build what matters, and stay to guard your systems.</p>
       </div>
@@ -2322,8 +2429,8 @@
 
   <section class="dark proof-intro" id="proof">
     <div class="eyebrow rv"><span class="sk"></span>Proof of work · field report</div>
-    <p class="big rv">Not a portfolio of demos. <b>Fourteen systems, live</b>, across three regions — each one still
-      owned by us.</p>
+    <h2 class="big rv">Not a portfolio of demos. <b>Fourteen systems, live</b>, across three regions — each one still
+      owned by us.</h2>
     <div class="stats rv">
       <div class="stat">
         <div class="n" data-count="14">14</div>
@@ -2357,7 +2464,7 @@
         </div>
         <div class="deck-controls">
           <button class="deck-btn" id="deckPrev" aria-label="Previous System">&larr; PREV</button>
-          <button class="deck-btn play-btn" id="deckPause" aria-label="Pause Auto-Play">PAUSE</button>
+          <button class="deck-btn play-btn" id="deckPause" aria-label="Play auto-rotation">PLAY</button>
           <button class="deck-btn" id="deckNext" aria-label="Next System">NEXT &rarr;</button>
         </div>
       </div>
@@ -2439,21 +2546,21 @@
       <div class="term-body" id="termBody">
         <div class="term-line"><span class="amber-bold">Hoversight Terminal Console</span> — Type <span class="cmd">help</span> for available commands.</div>
         <div class="term-line" style="opacity:0.65; font-size:11px">Connected to edge cluster [ph-west-1]. Click any quick command pill below.</div>
-        <div class="term-output" id="termOutput"></div>
+        <div class="term-output" id="termOutput" role="log" aria-live="polite" aria-label="Terminal output"></div>
         <div class="term-input-row">
           <span class="term-prompt">guest@hoversight:~$</span>
           <input type="text" class="term-input" id="termInput" placeholder="type command (e.g. help, systems, status)..." autocomplete="off" spellcheck="false">
         </div>
       </div>
-      <div class="term-pills">
-        <span class="term-pill" data-cmd="help">help</span>
-        <span class="term-pill" data-cmd="services">services</span>
-        <span class="term-pill" data-cmd="systems">systems</span>
-        <span class="term-pill" data-cmd="regions">regions</span>
-        <span class="term-pill" data-cmd="status">status</span>
-        <span class="term-pill" data-cmd="about">about</span>
-        <span class="term-pill" data-cmd="book">book</span>
-        <span class="term-pill" data-cmd="clear">clear</span>
+      <div class="term-pills" role="group" aria-label="Quick terminal commands">
+        <span class="term-pill" role="button" tabindex="0" data-cmd="help">help</span>
+        <span class="term-pill" role="button" tabindex="0" data-cmd="services">services</span>
+        <span class="term-pill" role="button" tabindex="0" data-cmd="systems">systems</span>
+        <span class="term-pill" role="button" tabindex="0" data-cmd="regions">regions</span>
+        <span class="term-pill" role="button" tabindex="0" data-cmd="status">status</span>
+        <span class="term-pill" role="button" tabindex="0" data-cmd="about">about</span>
+        <span class="term-pill" role="button" tabindex="0" data-cmd="book">book</span>
+        <span class="term-pill" role="button" tabindex="0" data-cmd="clear">clear</span>
       </div>
     </div>
   </section>
@@ -2488,7 +2595,33 @@
     <div>
       <div class="eyebrow rv" style="margin-bottom:34px"><span class="sk"></span>Start here</div>
       <h2 class="rv">Come with the <span class="aw">messy</span> version.</h2>
+      <p class="lead-intro rv">No polished brief required. Tell us what's broken, half-built, or slowing you down — we'll take it from there.</p>
     </div>
+
+    <form class="lead-form rv" id="leadForm" novalidate>
+      <div class="lead-row">
+        <div class="lead-field">
+          <label for="leadName">Your name</label>
+          <input type="text" id="leadName" name="name" autocomplete="name" required maxlength="120" placeholder="Jane Dela Cruz">
+        </div>
+        <div class="lead-field">
+          <label for="leadEmail">Email</label>
+          <input type="email" id="leadEmail" name="email" autocomplete="email" required maxlength="160" placeholder="you@company.com" inputmode="email">
+        </div>
+      </div>
+      <div class="lead-field">
+        <label for="leadMsg">The messy version</label>
+        <textarea id="leadMsg" name="message" rows="4" required maxlength="1500" placeholder="e.g. Our inventory lives in three spreadsheets that never agree, and the app a freelancer built stopped syncing last month…"></textarea>
+      </div>
+      <!-- honeypot: real people leave this empty -->
+      <div class="lead-hp" aria-hidden="true"><label for="leadCompanyUrl">Company URL</label><input type="text" id="leadCompanyUrl" name="company_url" tabindex="-1" autocomplete="off"></div>
+      <div class="lead-actions">
+        <button type="submit" class="cta" id="leadSubmit">Send it over <span class="sk"></span></button>
+        <span class="lead-note">Opens your email to <b>info@hoversight.agency</b> with everything filled in.</span>
+      </div>
+      <p class="lead-status" id="leadStatus" role="status" aria-live="polite" hidden></p>
+    </form>
+
     <div class="rv">
       <div class="loop" style="margin-bottom:40px"><span>Discovery</span><span class="sk"></span><span>Build</span><span
           class="sk"></span><span>Support</span><span class="sk"></span><span>Repeat</span></div>
@@ -2646,7 +2779,7 @@
     }
 
     let deckIdx = 0;
-    let deckIsPlaying = true;
+    let deckIsPlaying = false; /* auto-rotation off by default: the deck no longer hijacks attention; users opt in with PLAY. Never runs under reduced motion. */
     let deckTimer = null;
     let deckProgressTimer = null;
     let progressPct = 0;
@@ -2719,7 +2852,7 @@
       clearInterval(deckProgressTimer);
       progressPct = 0;
 
-      if (deckIsPlaying) {
+      if (deckIsPlaying && !rm) {
         deckProgressTimer = setInterval(() => {
           progressPct += 2.5;
           if (deckProgressFill) deckProgressFill.style.width = progressPct + '%';
@@ -2738,6 +2871,7 @@
       deckPause.addEventListener('click', () => {
         deckIsPlaying = !deckIsPlaying;
         deckPause.textContent = deckIsPlaying ? 'PAUSE' : 'PLAY';
+        deckPause.setAttribute('aria-label', deckIsPlaying ? 'Pause auto-rotation' : 'Play auto-rotation');
         resetDeckTimer();
       });
     }
@@ -2746,6 +2880,12 @@
     if (ALL_PROJECTS.length > 0) {
       showDeckProject(0);
       resetDeckTimer();
+    }
+    // Reduced motion: disable the auto-rotation control entirely.
+    if (rm && deckPause) {
+      deckPause.disabled = true;
+      deckPause.textContent = 'STATIC';
+      deckPause.setAttribute('aria-label', 'Auto-rotation disabled (reduced motion)');
     }
     function bindCardEvents() {
       document.querySelectorAll('.card').forEach(card => {
@@ -2925,13 +3065,58 @@
     }
 
     document.querySelectorAll('.term-pill').forEach(pill => {
-      pill.addEventListener('click', () => {
+      const runPill = () => {
         const cmd = pill.dataset.cmd;
         if (termInput) termInput.value = cmd;
         execCommand(cmd);
         if (termInput) termInput.value = '';
+      };
+      pill.addEventListener('click', runPill);
+      pill.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
+          e.preventDefault();
+          runPill();
+        }
       });
     });
+
+    /* Lead capture → structured email (no backend; routes to the monitored inbox) */
+    (function () {
+      const form = document.getElementById('leadForm');
+      if (!form) return;
+      const statusEl = document.getElementById('leadStatus');
+      const showStatus = (msg, isErr) => {
+        if (!statusEl) return;
+        statusEl.textContent = msg;
+        statusEl.classList.toggle('err', !!isErr);
+        statusEl.hidden = false;
+      };
+      const nameEl = document.getElementById('leadName');
+      const emailEl = document.getElementById('leadEmail');
+      const msgEl = document.getElementById('leadMsg');
+      const hpEl = document.getElementById('leadCompanyUrl');
+      form.addEventListener('submit', e => {
+        e.preventDefault();
+        // Honeypot: silently drop bot submissions that fill the hidden field.
+        if (hpEl && hpEl.value.trim()) return;
+        if (!form.checkValidity()) {
+          form.reportValidity();
+          return;
+        }
+        const name = nameEl.value.trim();
+        const email = emailEl.value.trim();
+        const message = msgEl.value.trim();
+        const subject = `New enquiry from ${name}`;
+        const body =
+          `Name: ${name}\n` +
+          `Email: ${email}\n\n` +
+          `The messy version:\n${message}\n\n` +
+          `— Sent from hoversight.agency`;
+        const href = `mailto:info@hoversight.agency?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+        window.location.href = href;
+        showStatus('Opening your email app with everything filled in. If nothing opens, email info@hoversight.agency directly.', false);
+      });
+    })();
 
     /* particles */
     const P = document.getElementById('particles');
