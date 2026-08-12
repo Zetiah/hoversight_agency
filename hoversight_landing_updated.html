@@ -571,6 +571,68 @@
       will-change: transform
     }
 
+    /* ===== HERO PROJECT MOSAIC (skewed, moving, right side) ===== */
+    .hero-mosaic {
+      position: absolute;
+      z-index: 2;
+      top: -12%;
+      right: -8%;
+      width: 48%;
+      height: 128%;
+      display: flex;
+      gap: 16px;
+      transform: skewY(-8deg) rotate(-3deg) scale(1.04);
+      transform-origin: top right;
+      opacity: calc((1 - var(--p, 0)) * 0.5);
+      pointer-events: none;
+      -webkit-mask-image: linear-gradient(100deg, transparent 4%, rgba(0, 0, 0, .35) 26%, #000 58%);
+      mask-image: linear-gradient(100deg, transparent 4%, rgba(0, 0, 0, .35) 26%, #000 58%);
+      will-change: opacity;
+    }
+
+    .mos-col {
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .mos-track {
+      display: flex;
+      flex-direction: column;
+      animation: mosScroll var(--dur, 42s) linear infinite;
+    }
+
+    .mos-col:nth-child(even) .mos-track {
+      animation-direction: reverse;
+    }
+
+    .mos-tile {
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid rgba(245, 239, 226, .10);
+      background: #0d0a06;
+      box-shadow: 0 12px 34px rgba(0, 0, 0, .45);
+      margin-bottom: 16px;
+      /* spacing lives on the tile (not the track's gap) so the duplicated set
+         tiles seamlessly: translateY(-50%) lands exactly one copy over. */
+    }
+
+    .mos-tile svg {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    @keyframes mosScroll {
+      from { transform: translateY(0); }
+      to { transform: translateY(-50%); }
+    }
+
+    @media (max-width: 900px) {
+      .hero-mosaic { display: none; }
+    }
+
+    .rmstatic .hero-mosaic { display: none; }
+
     .stage-core {
       position: relative;
       z-index: 5;
@@ -2306,6 +2368,7 @@
             d="M12 0C13.2 8 16 10.8 24 12C16 13.2 13.2 16 12 24C10.8 16 8 13.2 0 12C8 10.8 10.8 8 12 0Z" />
         </svg></span>
       <div class="particles" id="particles" aria-hidden="true"></div>
+      <div class="hero-mosaic" id="heroMosaic" aria-hidden="true"></div>
 
       <div class="stage-core">
         <div class="eyebrow scrollcue"><span class="sk"></span>Your outsourced tech department</div>
@@ -2437,8 +2500,8 @@
         <div class="l">Systems live</div>
       </div>
       <div class="stat">
-        <div class="n" data-count="3">03</div>
-        <div class="l">Regions</div>
+        <div class="n" data-count="6">06</div>
+        <div class="l">System types</div>
       </div>
       <div class="stat">
         <div class="n">∞</div>
@@ -2446,15 +2509,6 @@
       </div>
     </div>
     
-    <div class="filter-bar rv">
-      <button class="filter-btn active" data-filter="all">All Systems (14)</button>
-      <button class="filter-btn" data-filter="negros">Negros (06)</button>
-      <button class="filter-btn" data-filter="iloilo">Iloilo (04)</button>
-      <button class="filter-btn" data-filter="canada">Canada (04)</button>
-      <button class="filter-btn" data-filter="dashboard">Dashboards</button>
-      <button class="filter-btn" data-filter="crm">CRM & Pipeline</button>
-    </div>
-
     <!-- ============ LIVE SURVEILLANCE SHOWCASE REEL ============ -->
     <div class="surveillance-deck rv" id="surveillanceDeck">
       <div class="deck-header">
@@ -2505,26 +2559,21 @@
     </div>
   </section>
 
-  <section class="dark" id="negros" style="padding-top:0">
+  <section class="dark" id="systems" style="padding-top:0">
     <div class="region-head rv">
-      <h2 data-px="1">Negros</h2>
-      <div class="meta">Region 01 · PH<br>06 systems live<br>Bacolod · Island-wide</div>
+      <h2 data-px="1">Fourteen systems, by discipline.</h2>
+      <div class="meta">14 live systems<br>06 system types<br>Continuously guarded</div>
     </div>
-    <div class="gallery" id="g-negros"></div>
-  </section>
-  <section class="pale" id="iloilo">
-    <div class="region-head rv">
-      <h2 data-px="-1">Iloilo</h2>
-      <div class="meta">Region 02 · PH<br>04 systems live<br>Western Visayas</div>
+    <div class="filter-bar rv" role="group" aria-label="Filter systems by type">
+      <button class="filter-btn active" data-filter="all">All Systems (14)</button>
+      <button class="filter-btn" data-filter="dashboard">Ops Dashboards (03)</button>
+      <button class="filter-btn" data-filter="crm">CRM &amp; Pipeline (03)</button>
+      <button class="filter-btn" data-filter="cards">Catalog &amp; Brokerage (03)</button>
+      <button class="filter-btn" data-filter="phone">Mobile &amp; QR (02)</button>
+      <button class="filter-btn" data-filter="editorial">Editorial (02)</button>
+      <button class="filter-btn" data-filter="calendar">Cashflow (01)</button>
     </div>
-    <div class="gallery" id="g-iloilo"></div>
-  </section>
-  <section class="dark" id="canada">
-    <div class="region-head rv">
-      <h2 data-px="1">Canada</h2>
-      <div class="meta">Region 03 · Global<br>04 systems live<br>Remote-work elite</div>
-    </div>
-    <div class="gallery" id="g-canada"></div>
+    <div class="gallery" id="g-all"></div>
   </section>
 
   <!-- ============ INTERACTIVE TERMINAL CONSOLE ============ -->
@@ -2749,11 +2798,10 @@
    <div class="meta"><div class="top"><div class="nm">${name}</div><div class="yr"><span class="live"></span>${yr}</div></div>
      <div class="tag">${tag}</div><div class="dsc">${desc}</div></div></article>`;
     }
-    for (const rg of ['negros', 'iloilo', 'canada'])
-      document.getElementById('g-' + rg).innerHTML = DATA[rg].map((p, i) => cardHTML(...p, rg).replace('class="card rv"', `class="card rv d${i % 3}"`)).join('');
+    /* Systems render into a single type-grouped grid (#g-all), built after ALL_PROJECTS below. */
 
     /* marquee */
-    const mqText = " · Discovery · Build · Support · Repeat · Fourteen systems live · Negros · Iloilo · Canada";
+    const mqText = " · Discovery · Build · Support · Repeat · Fourteen systems live · Dashboards · CRM · Catalog · Mobile · Editorial";
     const mqEl = document.getElementById('mq'), mq2El = document.getElementById('mq2');
     if (mqEl) mqEl.textContent = mqText;
     if (mq2El) mq2El.textContent = mqText;
@@ -2777,6 +2825,36 @@
         });
       });
     }
+
+    /* Populate the unified, type-grouped systems grid */
+    const TYPE_ORDER = ['dashboard', 'crm', 'cards', 'phone', 'editorial', 'calendar'];
+    const gAll = document.getElementById('g-all');
+    if (gAll) {
+      const ordered = [...ALL_PROJECTS].sort((a, b) => TYPE_ORDER.indexOf(a.tpl) - TYPE_ORDER.indexOf(b.tpl));
+      gAll.innerHTML = ordered.map((p, i) =>
+        cardHTML(p.name, p.tag, p.yr, p.desc, p.tpl, p.label, p.extra, p.region)
+          .replace('class="card rv"', `class="card rv d${i % 3}"`)
+      ).join('');
+    }
+
+    /* Build the skewed hero mosaic from live-project preview screens */
+    (function buildMosaic() {
+      const host = document.getElementById('heroMosaic');
+      if (!host || rm || !ALL_PROJECTS.length) return;
+      const COLS = 3;
+      for (let c = 0; c < COLS; c++) {
+        const col = document.createElement('div');
+        col.className = 'mos-col';
+        const track = document.createElement('div');
+        track.className = 'mos-track';
+        track.style.setProperty('--dur', (36 + c * 9) + 's');
+        const set = ALL_PROJECTS.filter((_, i) => i % COLS === c);
+        const tiles = set.map(p => `<div class="mos-tile">${screen(p.tpl, p.label, p.extra)}</div>`).join('');
+        track.innerHTML = tiles + tiles; /* duplicated for a seamless loop */
+        col.appendChild(track);
+        host.appendChild(col);
+      }
+    })();
 
     let deckIdx = 0;
     let deckIsPlaying = false; /* auto-rotation off by default: the deck no longer hijacks attention; users opt in with PLAY. Never runs under reduced motion. */
@@ -2806,13 +2884,13 @@
       document.querySelectorAll('.deck-thumb').forEach(t => {
         t.addEventListener('click', () => {
           deckIdx = parseInt(t.dataset.idx, 10);
-          showDeckProject(deckIdx);
+          showDeckProject(deckIdx, true);
           resetDeckTimer();
         });
       });
     }
 
-    function showDeckProject(idx) {
+    function showDeckProject(idx, userScroll) {
       if (idx < 0) idx = ALL_PROJECTS.length - 1;
       if (idx >= ALL_PROJECTS.length) idx = 0;
       deckIdx = idx;
@@ -2821,8 +2899,8 @@
       if (!p) return;
 
       if (deckTitle) deckTitle.textContent = p.name;
-      if (deckRegion) deckRegion.textContent = regionNames[p.region] || p.region;
-      if (deckType) deckType.textContent = typeNames[p.tpl] || p.tag;
+      if (deckRegion) deckRegion.textContent = typeNames[p.tpl] || p.tag;
+      if (deckType) deckType.textContent = p.tag;
       if (deckDesc) deckDesc.textContent = p.desc;
       if (deckYr) deckYr.textContent = p.yr;
       if (deckCounter) deckCounter.textContent = `SYSTEM ${String(deckIdx + 1).padStart(2, '0')} OF ${String(ALL_PROJECTS.length).padStart(2, '0')}`;
@@ -2840,7 +2918,14 @@
       document.querySelectorAll('.deck-thumb').forEach((t, i) => {
         const isActive = i === deckIdx;
         t.classList.toggle('active', isActive);
-        if (isActive) t.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        // Center the active thumbnail within its own strip only — never scroll the page.
+        // (Previously scrollIntoView jumped the whole page down to Proof on load.)
+        if (isActive && userScroll && deckThumbnails) {
+          const target = deckThumbnails.scrollLeft
+            + t.getBoundingClientRect().left - deckThumbnails.getBoundingClientRect().left
+            - (deckThumbnails.clientWidth - t.clientWidth) / 2;
+          deckThumbnails.scrollTo({ left: Math.max(0, target), behavior: 'smooth' });
+        }
       });
 
       progressPct = 0;
@@ -2860,13 +2945,13 @@
 
         deckTimer = setInterval(() => {
           deckIdx = (deckIdx + 1) % ALL_PROJECTS.length;
-          showDeckProject(deckIdx);
+          showDeckProject(deckIdx, true);
         }, 4000);
       }
     }
 
-    if (deckPrev) deckPrev.addEventListener('click', () => { showDeckProject(deckIdx - 1); resetDeckTimer(); });
-    if (deckNext) deckNext.addEventListener('click', () => { showDeckProject(deckIdx + 1); resetDeckTimer(); });
+    if (deckPrev) deckPrev.addEventListener('click', () => { showDeckProject(deckIdx - 1, true); resetDeckTimer(); });
+    if (deckNext) deckNext.addEventListener('click', () => { showDeckProject(deckIdx + 1, true); resetDeckTimer(); });
     if (deckPause) {
       deckPause.addEventListener('click', () => {
         deckIsPlaying = !deckIsPlaying;
@@ -2951,13 +3036,7 @@
         btn.classList.add('active');
         const filter = btn.dataset.filter;
         document.querySelectorAll('.card').forEach(card => {
-          if (filter === 'all') {
-            card.classList.remove('filtered-out');
-          } else if (filter === 'negros' || filter === 'iloilo' || filter === 'canada') {
-            card.classList.toggle('filtered-out', card.dataset.region !== filter);
-          } else {
-            card.classList.toggle('filtered-out', card.dataset.tpl !== filter);
-          }
+          card.classList.toggle('filtered-out', filter !== 'all' && card.dataset.tpl !== filter);
         });
       });
     });
